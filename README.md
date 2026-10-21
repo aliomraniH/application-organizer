@@ -21,7 +21,7 @@ Six layers, each with one job: short **project instructions**; **project knowled
 ## Quick start (10 minutes)
 
 1. **Create a Claude Project** for your campaign on claude.ai.
-2. **Save the skills.** Add each folder in [skills/](skills/) as a skill in your account (one `SKILL.md` per skill). Start with document-sync, decisions-queue and contact-log; add the others when you set up a sweep. Claude Code users can copy them into `.claude/skills/` or use the [plugin](plugin/README.md).
+2. **Save the skills.** Add each folder in [skills/](skills/) as a skill in your account (one `SKILL.md` per skill). Start with document-sync, decisions-queue and contact-log; add the others when you set up a sweep. Claude Code users can copy them into `.claude/skills/` or install all six as a [plugin](plugin/README.md): `/plugin install application-organizer --marketplace aliomraniH/application-organizer`.
 3. **Paste prompt 01** ([Bootstrap a project](prompts/01-bootstrap-project.md), below) into a new chat in the project and answer its questions in one reply. If you already have a project, use prompt 02 instead.
 4. **Let it create** your Decisions doc, Contact log, one editable doc per document, and the stable project files. Open each link once.
 5. **Paste the project instructions** it wrote into the project's instructions field, and check the dated rules it saved to memory.

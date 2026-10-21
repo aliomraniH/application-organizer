@@ -12,7 +12,7 @@ Contributions that make the pattern easier to adopt are welcome: a new skill, a 
    - no time-sensitive wording, no CRITICAL or ALWAYS shouting
 3. End every open question as a row in the Decisions doc through decisions-queue, never in a report or chat.
 4. Keep placeholders angle-bracketed: `<DECISIONS_DOC_URL>`, `<CONTACT_LOG_URL>`, `<TRACKER_URL>`, `<PROJECT_NAME>`.
-5. Add one row to [skills/README.md](skills/README.md) and the folder to the `skills` list in [plugin/marketplace.json](plugin/marketplace.json).
+5. Add one row to [skills/README.md](skills/README.md) and the folder to the `skills` list in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json), then run `claude plugin validate .` and bump the entry's `version`.
 
 ## Proposing a scenario
 

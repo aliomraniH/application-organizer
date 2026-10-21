@@ -1,31 +1,43 @@
 # Plugin
 
-The six skills can install as one Claude Code plugin ([plugins docs](https://code.claude.com/docs/en/plugins)).
+The six skills install together as one Claude Code plugin ([plugins docs](https://code.claude.com/docs/en/plugins)).
 
-- `plugin.json` is the plugin manifest: name, version, description, author, license.
-- `marketplace.json` is the marketplace entry. Its `source` is `"."`, the repository root, and its `skills` list names the six skill folders, so only those load.
-
-## TODO: location
-
-Claude Code reads a marketplace from `.claude-plugin/marketplace.json` at the marketplace root, and a manifest from `.claude-plugin/plugin.json` at the plugin root. A component path must stay inside the plugin root (`../skills` does not load). The files here follow the layout in [BRIEF.md](../BRIEF.md), which puts them in `plugin/`, so `/plugin marketplace add` does not find them yet.
-
-To make the repository installable, a maintainer copies `marketplace.json` to `.claude-plugin/marketplace.json` at the repository root (not `plugin.json`: with the root as the plugin's source, the marketplace entry is the manifest), then checks it:
-
-    claude plugin validate .
-
-Untested: whether `"."` as `source` loads the listed skills as expected. Run the validator and a local install before announcing the plugin.
-
-## Install, once the marketplace file is at the root
+## Install
 
 Inside Claude Code:
 
+    /plugin install application-organizer --marketplace aliomraniH/application-organizer
+
+That adds this repository as a marketplace and opens the install panel, where you choose a scope. It needs a recent Claude Code. On an older version, add the marketplace and pick the plugin from the Discover tab:
+
     /plugin marketplace add aliomraniH/application-organizer
     /plugin
-
-then pick application-organizer from the Discover tab and choose a scope.
 
 From a shell:
 
     claude plugin install application-organizer --marketplace aliomraniH/application-organizer --scope project
 
-(The `--marketplace` form needs a recent Claude Code; older versions take the plugin name and marketplace name joined by an at sign. This repo's privacy check bans that character in Markdown, so it is spelled out here.)
+(Older versions take the plugin name and the marketplace name joined by an at sign. This repo's privacy check bans that character in Markdown, so it is spelled out here.)
+
+## How it is wired
+
+Claude Code reads a marketplace only from `.claude-plugin/marketplace.json` at the marketplace root, so the file lives there, at the repository root, not in this folder. Its one entry:
+
+- `source` is `"."`, the repository root, so the root is the plugin.
+- `skills` lists the six folders under `skills/`, so only those load. The docs, prompts and templates are copied with the plugin but are not components.
+- With no `plugin.json`, the marketplace entry is the manifest: name, version, description, license and keywords live in it.
+
+BRIEF.md placed the manifest and marketplace entry in this folder. They moved because Claude Code does not look here, and a plugin cannot load skills from outside its own root.
+
+## Checking a change
+
+After editing the marketplace file or adding a skill:
+
+    claude plugin validate .
+
+Then install it from your checkout to confirm the skills arrive:
+
+    claude plugin marketplace add ./
+    claude plugin install application-organizer --marketplace application-organizer
+
+Bump `version` in the marketplace entry when the skills change; an installed plugin stays on its version until you do.
