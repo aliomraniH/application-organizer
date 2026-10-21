@@ -28,3 +28,6 @@ Compare the newest sweep's verified findings and any decision recorded since the
 
 ## Content rules
 First person, plain words, no product language; every number traces to a verified source and keeps its qualifier; preprints labelled; a change that would contradict a submitted document goes to the Decisions doc instead of being applied; version information lives only in the version-history table.
+
+## Related skills
+The pending-proposal row lives in <DECISIONS_DOC_URL> and is kept by decisions-queue. When an approved change means a controlled document no longer agrees, add a Decisions-doc row naming the document; document-sync carries the person's resulting edit.

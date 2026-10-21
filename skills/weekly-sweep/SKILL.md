@@ -33,3 +33,6 @@ Scheduled: one message with window, item count, the three to five items that mos
 
 ## Library pass
 Sources behind a login (a library, a subscription) are read from the person's own browser on request, never from a scheduled run. Mark each UNREAD item read or still unreachable in the report, and correct agent wording the full text contradicts.
+
+## Related skills
+evidence-tracker and approved-summary read this sweep's report after it is saved, ideally from a separate scheduled task later the same day, so a failed sweep does not take the updates down with it. Decisions go through decisions-queue to <DECISIONS_DOC_URL>.

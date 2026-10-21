@@ -28,3 +28,6 @@ Never create dated or versioned copies. History lives in the editable doc's vers
 
 ## Adding a document
 Add a tracker row with the stable file path, read the doc's block ids in order, confirm the count matches the published copy, run the exact-text search once, write the snapshot, add the register row.
+
+## Related skills
+Decisions-doc rows (conflicts, over-limit flags, failed verifications) are added through decisions-queue at <DECISIONS_DOC_URL>. Sync never answers them.

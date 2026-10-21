@@ -24,3 +24,6 @@ Apply as dictated; minor bump for content, major for structure; log "dictated" i
 
 ## Writing rules
 Sentences under 25 words; specifics not adjectives; every number with its qualifier; preprints labelled; library-pass corrections win over sweep wording; never frame a watched person's work as limited; never state an affiliation or date not seen in a project file or verified source; questions the update cannot settle go to the Decisions doc.
+
+## Related skills
+Reads the newest weekly-sweep report. Questions the update cannot settle go to <DECISIONS_DOC_URL> through decisions-queue. The tracker never changes a controlled document; document-sync owns those.

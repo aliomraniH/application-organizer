@@ -27,3 +27,6 @@ Any skill or session that would otherwise leave a question in a report, a tracke
 3. Update the open-item count at the top of the doc.
 
 Never put a pending decision into memory; the doc is the record. Durable facts the person states while answering belong in memory as dated rules.
+
+## Related skills
+Every other skill in this set adds its questions here instead of leaving them in a report or a chat aside. The skill that owns the work applies the answer: document-sync for controlled documents, contact-log for outreach, approved-summary for the summary.
