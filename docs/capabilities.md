@@ -32,7 +32,7 @@ The pattern uses `db` and, optionally, `mcp`. The rest are listed so a reader kn
 | Capability | What it offers | Used by | Verified how |
 | --- | --- | --- | --- |
 | `db` | The artifact database, read and written by the page | console-page.html | used in the pilot |
-| `mcp` | Call the viewer's connectors from a page | console-page.html (optional "run sync now" button that fires a scheduled task) | used in the pilot |
+| `mcp` | Call the viewer's connectors from a page | console-page.html (optional "run sync now" button that fires a scheduled task) | used in the pilot; verified again in the v2 build session: the template's button, declared as `{mcp: {servers: [{server: "Claude Code Remote", tools: ["fire_trigger"]}]}}`, called `fire_trigger` with `meta/config.triggerId`, a poke-only task fired 50 seconds after setup and woke the building session |
 | `artifact` | A page republishes itself; for pages that are the record | not yet | documented |
 | `assets` | Uploads | not yet | documented |
 | `comments` | Page UI to the artifact's comment store | not yet | documented |
@@ -46,7 +46,7 @@ The pattern uses `db` and, optionally, `mcp`. The rest are listed so a reader kn
 
 | Capability | What it offers | Used by | Verified how |
 | --- | --- | --- | --- |
-| Scheduled tasks | Create with a cron or a one-shot time; each run starts a fresh session; connectors included per task; `fire_trigger` starts a run on demand (what the console button calls) | prompts 01, 03, 07; console-page.html | used in the pilot |
+| Scheduled tasks | Create with a cron or a one-shot time; each run starts a fresh session; connectors included per task; `fire_trigger` starts a run on demand (what the console button calls); a task with neither cron nor one-shot time is poke-only and fires only from `fire_trigger` | prompts 01, 03, 07; console-page.html | used in the pilot; `fire_trigger` from the console button verified in the v2 build session |
 
 Public page: [scheduled tasks](https://code.claude.com/docs/en/routines).
 
