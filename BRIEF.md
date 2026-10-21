@@ -684,6 +684,7 @@ Anthropic and MCP project (undated unless shown; fetched 20–21 Oct 2026):
 - [MCP in Claude Code](https://code.claude.com/docs/en/mcp)
 - [Scheduled tasks](https://code.claude.com/docs/en/routines)
 - [Plugins overview](https://claude.com/docs/plugins/overview)
+- [Claude Code plugins](https://code.claude.com/docs/en/plugins) (named in the layout above as the plugin schema; added to this list when the repo was built)
 - [Building a connector](https://claude.com/docs/connectors/building/index)
 - [Claude Code security](https://code.claude.com/docs/en/security)
 - [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
