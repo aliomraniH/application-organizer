@@ -11,8 +11,9 @@ Contributions that make the pattern easier to adopt are welcome: a new skill, a 
    - exact steps for fragile operations: writes, syncs, anything with a lock or a guard
    - no time-sensitive wording, no CRITICAL or ALWAYS shouting
 3. End every open question as a row in the Decisions doc through decisions-queue, never in a report or chat.
-4. Keep placeholders angle-bracketed: `<DECISIONS_DOC_URL>`, `<CONTACT_LOG_URL>`, `<TRACKER_URL>`, `<PROJECT_NAME>`.
-5. Add one row to [skills/README.md](skills/README.md) and the folder to the `skills` list in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json), then run `claude plugin validate .` and bump the entry's `version`.
+4. Keep placeholders angle-bracketed: `<DECISIONS_DOC_URL>`, `<CONTACT_LOG_URL>`, `<TRACKER_URL>`, `<PROJECT_NAME>`, `<REGISTRY_ROW>`.
+5. If the skill reads or writes the ledger, state the schema it expects in its first paragraph (`project-ledger v1`), show every row read or write as a one-line call shape (action · path · fields), and take capability facts only from [docs/capabilities.md](docs/capabilities.md).
+6. Add one row to [skills/README.md](skills/README.md) and the folder to the `skills` list in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json), then run `claude plugin validate .` and bump the entry's `version`.
 
 ## Proposing a scenario
 
@@ -38,7 +39,12 @@ The repo is public. See [docs/privacy.md](docs/privacy.md). In short:
 
 ### Privacy check
 
-The check fails on any at sign in a Markdown file, the usual sign of an email address. The one documented exception is a line that quotes the character itself in double quotes, as BRIEF.md does when it states this rule. The script writes the character as the octal escape `\100`, so this file passes its own check.
+Two checks run before every commit.
+
+1. **At sign.** Fails on any at sign in a Markdown file, the usual sign of an email address.
+2. **Artifact links.** Fails on any claude.ai artifact link (the `artifact` and `code/artifact` paths under claude.ai) in any file. A real artifact link points at someone's tracker or document. Use the `<TRACKER_URL>` placeholder instead.
+
+The one documented exception to each is a line that quotes the searched text itself in double quotes, as BRIEF.md and BRIEF-v2.md do when they state these rules. The script writes the at sign as the octal escape `\100` and splits the artifact path, so this file passes its own checks.
 
 Save as `.git/hooks/pre-commit` and make it executable (`chmod +x .git/hooks/pre-commit`):
 
@@ -52,6 +58,16 @@ if [ -n "$hits" ]; then
   echo "Privacy check failed: at sign found in Markdown."
   echo "$hits"
   echo "Replace addresses and handles with an angle-bracketed placeholder."
+  exit 1
+fi
+# Fail if any file contains a claude.ai artifact link,
+# except a line that quotes the path itself in double quotes.
+art='claude[.]ai/(code/)?''artifact'
+hits=$(grep -rnIE --exclude-dir=.git -e "$art" . | grep -vE "\"$art\"")
+if [ -n "$hits" ]; then
+  echo "Privacy check failed: artifact link found."
+  echo "$hits"
+  echo "Replace it with the <TRACKER_URL> placeholder."
   exit 1
 fi
 ```

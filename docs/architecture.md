@@ -92,7 +92,7 @@ The rule that holds it together: **status never lives in prose or in memory; it 
 
 ## The test layer for sources
 
-When a project reads from connectors, MCP servers, APIs or a database, a test layer sits across the six layers. It adds no new kind of thing; it is built from the same parts:
+When a project reads from connectors, MCP servers, APIs or a database, a test layer sits across the seven layers. It adds no new kind of thing; it is built from the same parts:
 
 | Part | Layer it lives in | Job |
 | --- | --- | --- |

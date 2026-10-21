@@ -2,6 +2,8 @@
 
 The nine skills install together as one Claude Code plugin ([plugins docs](https://code.claude.com/docs/en/plugins)).
 
+The nine: document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check, project-ledger, capability-check. Version 0.3.0; see [CHANGELOG.md](../CHANGELOG.md).
+
 ## Install
 
 Inside Claude Code:

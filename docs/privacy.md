@@ -6,7 +6,8 @@ This repository is public. Your campaign is not. The pattern keeps them apart: t
 
 - A real person's name, email address, phone number or handle
 - A real institution, program, employer, funder or team, when it identifies you or someone else
-- A document URL (Claude Docs, Google Docs, SharePoint, Notion, anything with an id in it)
+- A document URL (Claude Docs, Google Docs, SharePoint, Notion, anything with an id in it) or an artifact URL (your tracker, your console page)
+- Ledger rows from your project: a tasks row, a claims row or a findings export carries real names, documents and dates
 - Any private fact: a deadline you are working to, a recommender, a reply you got, a decision you made
 - Secrets: API keys, connection strings, tokens. `.mcp.json` files use `${VAR}` and the value lives in an environment variable or a network secret
 
@@ -28,7 +29,8 @@ Placeholders are angle-bracketed and upper-case with underscores. They are fille
 | `<PERSON>` | the person whose campaign it is |
 | `<DECISIONS_DOC_URL>` | link to your Decisions doc |
 | `<CONTACT_LOG_URL>` | link to your Contact log |
-| `<TRACKER_URL>` | link to your sync tracker |
+| `<TRACKER_URL>` | link to your tracker artifact (the ledger and console page) |
+| `<REGISTRY_ROW>` | the id of a registry row, `programs/<REGISTRY_ROW>` |
 | `<project-files>` | the folder or prefix your project files live under |
 | `<url>`, `<date>`, `<orcid>` | a value filled per row |
 
@@ -36,9 +38,13 @@ Lower-case angle-bracketed phrases in templates (`<what the project is about, in
 
 Worked examples use invented names only: Dr. Example, Dr. Sample, Northfield University. Add new invented names in the same style and list them in your pull request.
 
-## The at-sign check
+## The privacy checks
 
-An email address is the most common leak, so the repo bans the at sign in Markdown. [CONTRIBUTING.md](../CONTRIBUTING.md#privacy-check) has the pre-commit check. The only documented exceptions are the two lines in [BRIEF.md](../BRIEF.md) that state the rule itself by quoting the character.
+An email address is the most common leak, so the repo bans the at sign in Markdown. A claude.ai artifact link is the second: it points at someone's real tracker or document. The repo bans those in every file. [CONTRIBUTING.md](../CONTRIBUTING.md#privacy-check) has both pre-commit checks.
+
+The only documented exceptions are lines that state a rule by quoting the searched text in double quotes: two lines in [BRIEF.md](../BRIEF.md) and one in [BRIEF-v2.md](../BRIEF-v2.md).
+
+Example rows in [templates/](../templates/) use invented content only: `Dr. Example`, `Northfield University`, `the handoff paper`, the identifier `10.0000/example.2026.1`, invented dates.
 
 ## If something leaks
 
