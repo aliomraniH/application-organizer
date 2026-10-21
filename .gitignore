@@ -1,0 +1,22 @@
+# Secrets never enter the repo. .mcp.json files use ${VAR} placeholders instead.
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# Your own campaign material belongs in your Claude Project, not in this public repo.
+private/
+campaign/
+*.local.md
+.mcp.local.json
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

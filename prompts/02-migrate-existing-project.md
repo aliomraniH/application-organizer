@@ -1,0 +1,8 @@
+Audit this existing Claude Project and migrate it to the application-organizer pattern (github.com/aliomraniH/application-organizer). Do not delete anything until I confirm the list.
+
+1. Inventory: list project knowledge (count, size against the cap, how many files are superseded versions of another), project instructions (present or empty), memory files (which hold rules, which hold status that belongs in a doc), skills enabled, scheduled tasks (model, prompt length, connectors, last run status), editable docs and artifacts.
+2. For each document series, name the current version and propose one stable filename; for each superseded file, say where its history already lives (doc version history, artifact history) or that it is unique.
+3. Show me three lists: delete (history exists elsewhere), keep (current or unique), and move (status lines in memory that belong in a Decisions doc or Contact log).
+4. After my confirmation: write the stable files, delete the superseded ones, create the Decisions doc and Contact log from the templates and move the status lines into them, trim memory to dated rules, and draft project instructions for me to paste.
+5. Shorten each scheduled task's prompt to a skill call, set the model I choose, and list the connectors to remove.
+6. Report before and after: file count, knowledge size, number of open decisions, number of contacts with unconfirmed status.
