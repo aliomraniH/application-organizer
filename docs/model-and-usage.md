@@ -46,3 +46,13 @@ Message me only if something was carried or a decision was added.
 - **Watch knowledge size against the cap.** The migration prompt ([02](../prompts/02-migrate-existing-project.md)) reports it before and after.
 - **Memory is read everywhere.** Every line in memory costs every chat. Keep it to dated rules.
 - **Skills load on demand.** Only a skill's name and description sit in context until it triggers ([skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)), which is why the body can hold exact steps and the description must stay precise.
+
+## Context budget with the ledger
+
+Structured memory ([structured-memory.md](structured-memory.md)) makes three more rules possible:
+
+- **Read deltas, not documents.** Read the registry row, then only what changed: `sinceRev` on a doc, `lastSeenSweep >= <date>` on findings, events ordered by `at`. A resuming chat reads its `tasks` row and asks nothing `decisionsAnswered` already holds.
+- **List to disk, not into context.** `list · findings · out_dir <scratch folder>` writes a whole collection to a file a script can read. The collection never enters the conversation.
+- **Query by set, in short lists.** `query · findings · where identifier in [<ten candidates>]` checks candidates against the record. `in` takes a short list; batch in tens, or list to disk and compare in code.
+
+A sweep that loaded a 40 KB prose ledger every week now reads nothing it does not need ([lesson 12](lessons.md#12-an-exclusion-list-is-a-set-not-a-document)).

@@ -1,6 +1,6 @@
-# Ten lessons
+# Fifteen lessons
 
-These come from three months of one real campaign, run first without the pattern and then with it. Each lesson names the failure it prevents.
+Lessons 1 to 10 come from three months of one real campaign, run first without the pattern and then with it. Lessons 11 to 15 come from adding structured memory to the same campaign. Each lesson names the failure it prevents.
 
 ## 1. One editable doc per thing people edit
 
@@ -61,3 +61,33 @@ These come from three months of one real campaign, run first without the pattern
 **Rule.** Before Claude drafts anything for a target, record that target's AI-use policy in memory and keep an authorship record per document: what Claude suggested, what the person wrote.
 
 **Failure it prevents.** A submission to a target that requires sole authorship, or an attestation the person cannot sign honestly. Where a target requires it, Claude's text is a suggestion the person rewrites.
+
+## 11. Status in prose rots; status in a row does not
+
+**Rule.** Status lives in a row with a timestamp, an author and a source ([structured-memory.md](structured-memory.md)), never in prose or memory.
+
+**Failure it prevents.** A tracking line in memory said two drafts were sent. A row with `at`, `by` and `source` would have said who claimed it and when, and the claim could have been checked.
+
+## 12. An exclusion list is a set, not a document
+
+**Rule.** Every identifier a sweep has seen is a `findings` row. The sweep's exclusion list is a query or a list to disk, never a prose file loaded whole.
+
+**Failure it prevents.** A prose ledger grew to 40 KB in four weeks, and every sweep loaded it whole. 866 rows queried by identifier cost nothing.
+
+## 13. A claim without a row is a claim nobody checked
+
+**Rule.** A cited fact that reaches a controlled document has a `claims` row with its source and verification date. Forward-only is fine.
+
+**Failure it prevents.** Provenance is cheap at write time and expensive at submission time. The first week's rows are the ones that matter, because they cover the sentences being edited now.
+
+## 14. The judge must see the record, not the week
+
+**Rule.** The sweep's judge and the weekly summary proposal receive a cumulative brief per watched sentence: every earlier finding on it, with direction and date. `atRev` says what the sentence said when the last decision was made.
+
+**Failure it prevents.** A new paper weighed against nothing always looks important. Recency bias turns every Monday into a rewrite.
+
+## 15. Write a page's rows, then look at the page
+
+**Rule.** When a console page is built in the same session as its data layer, say that it has not been rendered, and let the first look be the person's.
+
+**Failure it prevents.** A session that cannot render the page reports it as working. The rows can be checked from the session; the page cannot.
