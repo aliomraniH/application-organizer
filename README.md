@@ -242,6 +242,7 @@ Three short flows, with invented names, showing the ledger at work.
 | `.mcp.json` examples with placeholders for secrets | [extensions/mcp-config-examples/](extensions/mcp-config-examples/README.md) |
 | Templates: instructions, register, sweep axes, sources, Decisions doc, Contact log, ledger schema, console page, example rows | [templates/](templates/) |
 | Installing the skills as one plugin | [plugin/README.md](plugin/README.md) |
+| Synthetic ledger fixtures and the offline console-page check | [tests/README.md](tests/README.md) |
 | How to contribute; the privacy check | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | The briefs this repo was built from | [BRIEF.md](BRIEF.md) (v1), [BRIEF-v2.md](BRIEF-v2.md) (structured memory) |
 

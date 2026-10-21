@@ -1,0 +1,24 @@
+{
+  "startedAt": "2026-10-19T06:00:02Z",
+  "endedAt": "2026-10-19T06:41:10Z",
+  "chat": "scheduled run: weekly sweep",
+  "task": "weekly sweep",
+  "status": "done",
+  "docsRead": {},
+  "rowsRead": [
+    "meta/ledger",
+    "programs/northfield"
+  ],
+  "decisionsAsked": [],
+  "decisionsAnswered": [],
+  "changes": [
+    "4 findings rows written",
+    "D-41 queued"
+  ],
+  "open": [
+    "UNREAD: 1 paywalled item"
+  ],
+  "by": "weekly-sweep",
+  "model": "<mid-tier>",
+  "synthetic": true
+}

@@ -1,0 +1,52 @@
+{
+  "name": "Northfield University",
+  "order": 1,
+  "master": {
+    "url": "<url>",
+    "version": "v1.4"
+  },
+  "source": {
+    "path": "program-files/northfield.md",
+    "version": "v1.4"
+  },
+  "statements": [
+    {
+      "key": "sop",
+      "label": "Statement of purpose",
+      "version": "v1.4",
+      "words": 998,
+      "fit": "1,000 words; 2 pp",
+      "limit": "1000 words",
+      "doc": {
+        "url": "<url>",
+        "docId": "doc_northfield_sop",
+        "tab": "main",
+        "node": null,
+        "syncedRev": 42,
+        "seenRev": 42
+      },
+      "snapshot": "snapshots/northfield-sop"
+    },
+    {
+      "key": "personal",
+      "label": "Personal statement",
+      "version": "v0.9",
+      "words": 612,
+      "fit": "500 words; over",
+      "limit": "500 words",
+      "doc": {
+        "url": "<url>",
+        "docId": "doc_northfield_personal",
+        "tab": "main",
+        "node": null,
+        "syncedRev": 7,
+        "seenRev": 9
+      },
+      "snapshot": "snapshots/northfield-personal"
+    }
+  ],
+  "status": "active",
+  "note": "personal statement over limit; gate open",
+  "lastSyncAt": "2026-10-21T02:03:41Z",
+  "synthetic": true
+}

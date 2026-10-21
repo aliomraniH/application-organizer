@@ -90,4 +90,4 @@ Lessons 1 to 10 come from three months of one real campaign, run first without t
 
 **Rule.** When a console page is built in the same session as its data layer, say that it has not been rendered, and let the first look be the person's.
 
-**Failure it prevents.** A session that cannot render the page reports it as working. The rows can be checked from the session; the page cannot.
+**Failure it prevents.** A session that cannot render the page reports it as working. The rows can be checked from the session (seed them, read them back at viewer level, try a write the rules must refuse); the page cannot.

@@ -1,0 +1,37 @@
+{
+  "identifier": "10.0000/example.2026.1",
+  "type": "doi",
+  "aliases": [],
+  "docId": "10.0000_example.2026.1",
+  "mentions": [
+    {
+      "sweep": "2026-10-19",
+      "date": "2026-10-19",
+      "label": "A"
+    }
+  ],
+  "sections": [
+    "A"
+  ],
+  "sweeps": 1,
+  "firstSeenSweep": "2026-10-19",
+  "lastSeenSweep": "2026-10-19",
+  "status": "bears-on-document",
+  "touchesDocument": true,
+  "watched": true,
+  "title": "The handoff paper",
+  "authors": [
+    "Dr. Example"
+  ],
+  "firstPublic": "2026-03-02",
+  "venue": "Journal of Examples",
+  "preprint": false,
+  "direction": "complicates",
+  "touches": [
+    "sop \u00b63"
+  ],
+  "weight": 3,
+  "source": "crossref",
+  "verified": "primary page",
+  "synthetic": true
+}

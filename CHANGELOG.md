@@ -19,6 +19,7 @@ Built from [BRIEF-v2.md](BRIEF-v2.md): structured memory.
 - README "Worked examples": a sentence gets edited, a sweep finds a paper, a chat resumes.
 - A "The record" section in each scenario.
 - A second privacy check: no artifact links in Markdown.
+- `tests/`: synthetic ledger fixtures (every row marked `synthetic`) and an offline Chromium check of the console page.
 
 ### Changed
 - document-sync, decisions-queue, weekly-sweep, approved-summary, evidence-tracker and source-check read and write ledger rows (tasks rows, claims checks, findings as the exclusion list, the cumulative brief, the ledger probe).

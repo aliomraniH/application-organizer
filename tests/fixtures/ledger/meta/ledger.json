@@ -1,0 +1,31 @@
+{
+  "schemaDoc": "ledger-schema.md",
+  "schemaVersion": "project-ledger v1",
+  "collections": [
+    "programs",
+    "snapshots",
+    "events",
+    "tasks",
+    "claims",
+    "findings",
+    "meta"
+  ],
+  "counts": {
+    "programs": 2,
+    "snapshots": 1,
+    "events": 4,
+    "tasks": 3,
+    "claims": 1,
+    "findings": 4
+  },
+  "backfill": {
+    "source": "SYNTHETIC fixture, not a real ledger",
+    "rows": 2,
+    "method": "script",
+    "verified": "ledger-transcribed",
+    "note": "the source's own count includes repeats; this is the unique count"
+  },
+  "lastFindingsWrite": "2026-10-19T09:12:00Z",
+  "lastClaimsWrite": "2026-10-21T02:03:20Z",
+  "synthetic": true
+}
