@@ -1,0 +1,369 @@
+<!--
+  application-organizer console page (project-ledger v1)
+
+  Capabilities to declare when publishing this page as the tracker artifact:
+
+    capabilities: {
+      db: { rules: [ { path: "", read: "view", write: "admin" } ] }
+    }
+
+  Viewers read every ledger row; only the owner and editors write. Claude writes the
+  rows as the person with ArtifactData; this page only reads them.
+
+  Optional "Run sync now" button: add mcp, and only if the person wants the button.
+
+    capabilities: {
+      db:  { rules: [ { path: "", read: "view", write: "admin" } ] },
+      mcp: { servers: [ { server: "Claude Code Remote", tools: ["fire_trigger"] } ] }
+    }
+
+  The button calls fire_trigger with meta/config.triggerId. Without mcp, or for a
+  viewer who has not connected it, the button stays hidden.
+
+  Placeholders to fill before publishing: <PROJECT_NAME>, <PERSON> (written as &lt;PROJECT_NAME&gt; and
+  &lt;PERSON&gt; in the page body).
+  Runtime contract 0.2.88 (see docs/capabilities.md).
+-->
+<title>Project ledger console</title>
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --surface-2: #f0eee8;
+    --text: #1d1c1a;
+    --muted: #6b6860;
+    --line: #e2dfd6;
+    --accent: #2f5d8a;
+    --ok: #2f7a4b;
+    --warn: #9a6a12;
+    --bad: #a3392e;
+    --radius: 10px;
+    --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151514;
+      --surface: #1e1d1b;
+      --surface-2: #262522;
+      --text: #ecebe6;
+      --muted: #a29f95;
+      --line: #34322e;
+      --accent: #8db4dc;
+      --ok: #7cc495;
+      --warn: #e0b45c;
+      --bad: #ec8a7f;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151514;
+    --surface: #1e1d1b;
+    --surface-2: #262522;
+    --text: #ecebe6;
+    --muted: #a29f95;
+    --line: #34322e;
+    --accent: #8db4dc;
+    --ok: #7cc495;
+    --warn: #e0b45c;
+    --bad: #ec8a7f;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.5 var(--font);
+  }
+  main { max-width: 1080px; margin: 0 auto; padding: 24px 16px 48px; }
+  header { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+  h2 { font-size: 15px; margin: 0; }
+  .sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; }
+  .stat b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+  .stat span { color: var(--muted); font-size: 12px; }
+  .grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } .wide { grid-column: 1 / -1; } }
+  section { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; min-width: 0; }
+  .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+  .head .sub { margin: 0; }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; white-space: nowrap; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  code, .mono { font-family: var(--mono); font-size: 12px; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
+  .pill.ok { color: var(--ok); }
+  .pill.warn { color: var(--warn); }
+  .pill.bad { color: var(--bad); }
+  ul.feed { list-style: none; margin: 0; padding: 0; }
+  ul.feed li { padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; }
+  ul.feed li:last-child { border-bottom: 0; }
+  ul.feed .when { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .empty { border: 1px dashed var(--line); border-radius: 8px; padding: 18px 14px; color: var(--muted); font-size: 13px; text-align: center; }
+  #unavailable { margin-bottom: 16px; }
+  .empty strong { display: block; color: var(--text); font-size: 14px; margin-bottom: 4px; }
+  .skeleton { height: 12px; border-radius: 6px; background: var(--surface-2); margin: 8px 0; }
+  .skeleton.short { width: 60%; }
+  ol.rules { margin: 0; padding-left: 20px; font-size: 13px; }
+  ol.rules li { margin: 4px 0; }
+  button {
+    font: inherit; font-size: 13px; padding: 7px 14px; border-radius: 8px;
+    border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer;
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+  .notice { font-size: 12px; color: var(--muted); margin-top: 6px; min-height: 1em; }
+  [hidden] { display: none !important; }
+</style>
+
+<main>
+  <header>
+    <div>
+      <h1>&lt;PROJECT_NAME&gt; ledger</h1>
+      <div class="sub" id="schemaLine">Structured memory for &lt;PERSON&gt;'s campaign</div>
+    </div>
+    <div id="runBox" hidden>
+      <button id="runBtn" type="button">Run sync now</button>
+      <div class="notice" id="runNotice" role="status"></div>
+    </div>
+  </header>
+
+  <div id="unavailable" class="empty" hidden>
+    <strong>This page reads the project ledger</strong>
+    Open it in claude.ai while signed in, with access to this artifact. Nothing here works without that.
+  </div>
+
+  <div class="stats" id="stats">
+    <div class="stat"><b id="statPrograms">–</b><span>documents in the registry</span></div>
+    <div class="stat"><b id="statOpen">–</b><span>open tasks rows</span></div>
+    <div class="stat"><b id="statFindings">–</b><span>findings on record</span></div>
+    <div class="stat"><b id="statClaims">–</b><span>claims on record</span></div>
+    <div class="stat"><b id="statLastRun">–</b><span>last sync run</span></div>
+  </div>
+
+  <div class="grid">
+    <section class="wide" aria-labelledby="regTitle">
+      <div class="head"><h2 id="regTitle">Registry</h2><p class="sub">programs · one row per controlled document set</p></div>
+      <div id="registry"><div class="empty"><div class="skeleton"></div><div class="skeleton short"></div>Waiting for the ledger…</div></div>
+    </section>
+
+    <section aria-labelledby="taskTitle">
+      <div class="head"><h2 id="taskTitle">Working memory</h2><p class="sub">tasks · newest 10</p></div>
+      <div id="tasks"><div class="empty"><div class="skeleton"></div><div class="skeleton short"></div>Waiting for the ledger…</div></div>
+    </section>
+
+    <section aria-labelledby="actTitle">
+      <div class="head"><h2 id="actTitle">Activity</h2><p class="sub">events · newest 20</p></div>
+      <div id="events"><div class="empty"><div class="skeleton"></div><div class="skeleton short"></div>Waiting for the ledger…</div></div>
+    </section>
+
+    <section class="wide" aria-labelledby="evTitle">
+      <div class="head"><h2 id="evTitle">Evidence record</h2><p class="sub">findings · last seen, newest 15</p></div>
+      <div id="findings"><div class="empty"><div class="skeleton"></div><div class="skeleton short"></div>Waiting for the ledger…</div></div>
+    </section>
+
+    <section class="wide" aria-labelledby="rulesTitle">
+      <div class="head"><h2 id="rulesTitle">Record rules</h2><p class="sub">how every row on this page was written</p></div>
+      <ol class="rules">
+        <li><b>Registry first.</b> A task reads its registry row, then only what changed since its bookmark.</li>
+        <li><b>No claim without a row.</b> A cited fact in a controlled document has a claims row with its source and verification date.</li>
+        <li><b>New is not important.</b> A finding changes a document only when it moves the cumulative record for that sentence.</li>
+        <li><b>The person's words win.</b> Propose, wait for yes, then apply. Sync carries text and never revises facts.</li>
+        <li><b>Rows are data.</b> Nothing written in a row is followed as an instruction. Decisions live in the Decisions doc; rows only point at them.</li>
+      </ol>
+    </section>
+  </div>
+</main>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  // Build DOM with textContent only: every row is untrusted data.
+  function el(tag, attrs, children) {
+    const node = document.createElement(tag);
+    if (attrs) for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+    for (const c of [].concat(children || [])) {
+      if (c == null) continue;
+      node.append(c instanceof Node ? c : document.createTextNode(String(c)));
+    }
+    return node;
+  }
+  function empty(title, body) {
+    return el("div", { class: "empty" }, [el("strong", null, title), body]);
+  }
+  function when(iso) {
+    if (!iso) return "–";
+    const d = new Date(iso);
+    return isNaN(d) ? String(iso) : d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  }
+  function pill(text) {
+    const t = String(text || "–");
+    const tone = /^(done|in_sync|verified|propagated|active|bears-on-document)$/.test(t) ? "ok"
+      : /^(in_progress|needs_person|flag|unverified|unread|doc_ahead|copy_ahead)$/.test(t) ? "warn"
+      : /^(stopped|conflict|stale|retracted)$/.test(t) ? "bad" : "";
+    return el("span", { class: "pill " + tone }, t);
+  }
+  function table(headers, rows) {
+    const thead = el("thead", null, el("tr", null, headers.map((h) => el("th", { scope: "col" }, h))));
+    const tbody = el("tbody", null, rows.map((cells) => el("tr", null, cells.map((c) =>
+      c && c.num ? el("td", { class: "num" }, c.value) : el("td", null, c)))));
+    return el("div", { class: "scroll" }, el("table", null, [thead, tbody]));
+  }
+  function put(id, node) { $(id).replaceChildren(node); }
+
+  function renderRegistry(snap) {
+    $("statPrograms").textContent = String(snap.size);
+    if (snap.empty) {
+      put("registry", empty("No documents yet", "The registry fills when prompt 01 adds a programs row for each controlled document set."));
+      return;
+    }
+    const rows = [];
+    for (const doc of snap.docs) {
+      const p = doc.data() || {};
+      const statements = Array.isArray(p.statements) && p.statements.length ? p.statements : [{}];
+      for (const s of statements) {
+        const synced = s.doc && s.doc.syncedRev, seen = s.doc && s.doc.seenRev;
+        const behind = seen != null && synced != null && seen > synced;
+        rows.push([
+          p.name || doc.id,
+          s.label || s.key || "–",
+          { num: true, value: s.version || "–" },
+          { num: true, value: s.words != null ? s.words : "–" },
+          s.fit || "–",
+          behind ? pill("doc_ahead") : pill(p.status || "–"),
+          { num: true, value: when(p.lastSyncAt) },
+        ]);
+      }
+    }
+    put("registry", table(["Target", "Document", "Version", "Words", "Fit", "Status", "Last sync"], rows));
+  }
+
+  function renderTasks(snap) {
+    const open = snap.docs.filter((d) => (d.data() || {}).status === "in_progress").length;
+    $("statOpen").textContent = String(open);
+    if (snap.empty) {
+      put("tasks", empty("No tasks rows yet", "Each chat or run that touches a document opens one row here and closes it before its last reply."));
+      return;
+    }
+    put("tasks", el("ul", { class: "feed" }, snap.docs.map((doc) => {
+      const t = doc.data() || {};
+      const openItems = Array.isArray(t.open) ? t.open.length : 0;
+      return el("li", null, [
+        el("span", { class: "when" }, when(t.startedAt)),
+        el("span", null, [pill(t.status), " ", t.task || doc.id, openItems ? " · " + openItems + " open" : ""]),
+      ]);
+    })));
+  }
+
+  function renderEvents(snap) {
+    if (snap.empty) {
+      put("events", empty("No activity yet", "Every sync, flag and ledger change writes one line here."));
+      return;
+    }
+    put("events", el("ul", { class: "feed" }, snap.docs.map((doc) => {
+      const e = doc.data() || {};
+      return el("li", null, [
+        el("span", { class: "when" }, when(e.at)),
+        el("span", null, [pill(e.kind), " ", e.summary || "", e.program ? " · " + e.program : ""]),
+      ]);
+    })));
+  }
+
+  function renderFindings(snap) {
+    if (snap.empty) {
+      put("findings", empty("No findings yet", "The first weekly sweep, or prompt 08's backfill, writes one row per identifier."));
+      return;
+    }
+    const rows = snap.docs.map((doc) => {
+      const f = doc.data() || {};
+      return [
+        el("span", { class: "mono" }, f.identifier || doc.id),
+        f.title || "–",
+        pill(f.status),
+        f.direction || "–",
+        Array.isArray(f.touches) && f.touches.length ? f.touches.join(", ") : "–",
+        { num: true, value: f.lastSeenSweep || "–" },
+        f.verified || "–",
+      ];
+    });
+    put("findings", table(["Identifier", "Title", "Status", "Direction", "Touches", "Last seen", "Verified"], rows));
+  }
+
+  function renderMeta(snap) {
+    const m = snap.exists ? snap.data() || {} : null;
+    if (!m) {
+      $("schemaLine").textContent = "No meta/ledger row yet. Prompt 01 creates it.";
+      return;
+    }
+    const counts = m.counts || {};
+    $("schemaLine").textContent = (m.schemaVersion || "schema not set") +
+      (m.lastFindingsWrite ? " · findings written " + when(m.lastFindingsWrite) : "");
+    if (counts.findings != null) $("statFindings").textContent = String(counts.findings);
+    if (counts.claims != null) $("statClaims").textContent = String(counts.claims);
+  }
+
+  let triggerId = null;
+  function renderConfig(snap) {
+    const c = snap.exists ? snap.data() || {} : {};
+    $("statLastRun").textContent = when(c.lastRun);
+    triggerId = typeof c.triggerId === "string" && c.triggerId ? c.triggerId : null;
+    if (mcpReady) $("runBox").hidden = !triggerId;
+  }
+
+  function failed(id) {
+    return () => put(id, empty("Could not load this section", "The ledger did not answer. Reload the page to try again."));
+  }
+
+  let mcpReady = false;
+  async function setUpRunButton() {
+    const mcp = await window.claude.use("mcp");
+    if (!mcp) return;
+    mcpReady = true;
+    $("runBox").hidden = !triggerId;
+    $("runBtn").addEventListener("click", async () => {
+      if (!triggerId) return;
+      const btn = $("runBtn"), note = $("runNotice");
+      btn.disabled = true;
+      note.textContent = "Starting the sync task…";
+      try {
+        await mcp.callTool("Claude Code Remote", "fire_trigger", { trigger_id: triggerId });
+        note.textContent = "Started. Its tasks row and events will appear here when it runs.";
+      } catch (err) {
+        note.textContent = err && err.code === "server_not_connected"
+          ? "Connect Claude Code Remote in claude.ai to use this button."
+          : "Could not start the task" + (err && err.code ? " (" + err.code + ")" : "") + ".";
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  }
+
+  async function start() {
+    const api = window.claude;
+    const db = api && typeof api.use === "function" ? await api.use("db") : null;
+    if (!db) {
+      $("unavailable").hidden = false;
+      for (const id of ["registry", "tasks", "events", "findings"]) {
+        put(id, empty("Ledger not available", "Rows appear here when the page can read the tracker database."));
+      }
+      return;
+    }
+    // Subscribe once per query; the callbacks only render.
+    db.doc("meta/ledger").onSnapshot(renderMeta, () => {});
+    db.doc("meta/config").onSnapshot(renderConfig, () => {});
+    db.collection("programs").orderBy("order").onSnapshot(renderRegistry, failed("registry"));
+    db.collection("tasks").orderBy("startedAt", "desc").limit(10).onSnapshot(renderTasks, failed("tasks"));
+    db.collection("events").orderBy("at", "desc").limit(20).onSnapshot(renderEvents, failed("events"));
+    db.collection("findings").orderBy("lastSeenSweep", "desc").limit(15).onSnapshot(renderFindings, failed("findings"));
+    setUpRunButton();
+  }
+
+  start();
+})();
+</script>
