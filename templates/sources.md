@@ -16,6 +16,7 @@ description: One row per connector, MCP server, API or database the project read
 | Google Drive | connector | claude.ai | read | folder "Northfield handbook" | none (OAuth) | nightly sync |
 | Reporting database | MCP server, read-only role | Claude Code `.mcp.json` | read | schema `reporting`, views only | `PG_READONLY_URL` | weekly sweep |
 | Crossref | public API | none | read | works by ORCID on the watch list | none | weekly sweep |
+| Tracker ledger | artifact database (ArtifactData) | the tracker artifact at <TRACKER_URL> | read and write (skills); read (viewers) | collections in `meta/ledger.collections` | none | every task |
 
 ## Probes
 
@@ -24,6 +25,7 @@ description: One row per connector, MCP server, API or database the project read
 | Google Drive | search "protocol handbook" in the scoped folder | 1 to 5 files, each with title and modified date | search the same term outside the folder | none; confirm write tools are Blocked |
 | Reporting database | run `weekly_enrolment_by_site` from `queries.md` with last week's dates | 5 to 40 rows; columns site, week, enrolled | `select 1 from hr.staff limit 1` | `create table reporting.source_check_probe (id int)` inside a transaction, rolled back |
 | Crossref | query.author for one watch-list name, from last week | 0 to 50 items, each with DOI and created date | none | none |
+| Tracker ledger | `get · meta/ledger` at viewer level; `query · tasks · where status == "in_progress", limit 5` | `schemaVersion` = project-ledger v1; 0 to 5 rows | none | none; the probe never writes a test row |
 
 ## Results (overwritten on each check)
 

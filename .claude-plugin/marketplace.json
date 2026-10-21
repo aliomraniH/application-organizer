@@ -8,15 +8,16 @@
     {
       "name": "application-organizer",
       "source": ".",
-      "description": "Seven skills for running a long, document-heavy campaign with Claude: document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check.",
-      "version": "0.2.0",
+      "description": "Nine skills for running a long, document-heavy campaign with Claude, with a structured-memory ledger: document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check, project-ledger, capability-check.",
+      "version": "0.3.0",
       "license": "MIT",
       "keywords": [
         "documents",
         "applications",
         "decisions",
         "sync",
-        "research-sweep"
+        "research-sweep",
+        "structured-memory"
       ],
       "skills": [
         "./skills/document-sync",
@@ -25,7 +26,9 @@
         "./skills/weekly-sweep",
         "./skills/evidence-tracker",
         "./skills/approved-summary",
-        "./skills/source-check"
+        "./skills/source-check",
+        "./skills/project-ledger",
+        "./skills/capability-check"
       ]
     }
   ]

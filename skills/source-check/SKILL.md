@@ -7,7 +7,7 @@ description: Tests every connector, MCP server and API the project reads from ag
 
 Every source the project reads (a connector, an MCP server, a public API, a database) has one row in the stable project file `sources.md`: what it is, where it is configured, what it may do, and the probes that prove it. This skill runs those probes and records what happened. It tests; it never repairs. A failed check becomes a Decisions-doc row at <DECISIONS_DOC_URL>, never a widened permission.
 
-Read `sources.md` first. It is the living spec; follow it over anything remembered.
+Read `sources.md` first. It is the living spec; follow it over anything remembered. Expects schema **project-ledger v1**: when the project has a ledger at <TRACKER_URL>, the ledger is tested as a source too (below).
 
 ## Rules
 1. Probes are reads. The only write a probe attempts is the write-refusal probe a row names, and only against the read-only role or tool it names, inside a transaction that is rolled back or on an object that does not exist.
@@ -27,6 +27,13 @@ For each row in `sources.md`, in order, run the checks the row lists. The standa
 5. **Write refusal** (databases and any row that names one). Run the named harmless write. Pass only on a permission refusal from the server or database. Quote the error's first line.
 6. **Secrets.** Search project files and any `.mcp.json` the row names for literal tokens, keys, passwords and connection strings. Pass if values appear only as `${VAR}` placeholders.
 7. **Task hygiene.** For each scheduled task the row names, compare the connectors the task carries with the connectors `sources.md` says it needs. Pass if the task carries no extra connector. If task settings cannot be read here, mark Unverified and list what the person should check.
+
+## The ledger as a source
+When the project has a ledger, `sources.md` carries a row for it, and the run adds three probes:
+1. **Viewer-level read**: `get · meta/ledger` with `as_level: "view"`. Pass if it returns the row (viewers read) and shows `schemaVersion`.
+2. **Where-query**: `query · tasks · where status == "in_progress", limit 5`. Pass if it returns rows or an empty set without error.
+3. **Schema match**: `meta/ledger.schemaVersion` equals the version the skills expect. A mismatch is a Fail with the default "run a capability check".
+The ledger probe reads only; it never writes a test row.
 
 ## Record
 1. Update each row's check columns in `sources.md`: last checked date, result per check (Pass, Fail, Unverified), one-line note. Overwrite in place; no dated copies.
