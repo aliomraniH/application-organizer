@@ -8,14 +8,19 @@ Before you use any of these, read the server's own page. Commands, flags and URL
 
 Two ways to read a Postgres database. Use one.
 
-- `reporting-db-supabase`: Supabase's hosted server. `read_only=true` runs queries as a read-only role, `project_ref` scopes it to one project, `features=database` limits it to the database tools. Supabase calls prompt injection the primary risk and says to keep manual approval of tool calls ([Supabase MCP](https://supabase.com/docs/guides/ai-tools/mcp)). Sign-in is OAuth on first use.
+- `reporting-db-supabase`: Supabase's hosted server. The URL is a placeholder on purpose: copy the server address from the [Supabase MCP](https://supabase.com/docs/guides/ai-tools/mcp) page and add three settings to it:
+  - `read_only=true`, which runs queries as a read-only role
+  - `project_ref=<your project ref>`, which scopes the server to one project
+  - `features=` with only the tool groups you need; the group names are on the Supabase page (unverified here)
+
+  Supabase calls prompt injection the primary risk and says to keep manual approval of tool calls. How sign-in works, and whether it works in an unattended scheduled task, is unverified; until you have confirmed it, give scheduled tasks a claude.ai connector instead and mark the check Unverified in `sources.md`.
 - `reporting-db-reference`: the MCP project's reference Postgres server. It is archived and unmaintained ([servers](https://github.com/modelcontextprotocol/servers)); treat it as a starting point only. `PG_READONLY_URL` is a connection string for a role with SELECT only on one schema.
 
-Whichever you use, the database still needs its own read-only role. A switch on the server is not a security control on its own. [Prompt 05](../../prompts/05-add-a-database.md) walks through the role, the named queries and a write-refusal test.
+Whichever you use, the database still needs its own read-only role. A switch on the server is not a security control on its own. The write-refusal check in the [source-check skill](../../skills/source-check/SKILL.md) tests the role itself, so it catches a server that does not honour its read-only setting. [Prompt 05](../../prompts/05-add-a-database.md) walks through the role, the named queries and a write-refusal test.
 
 | Variable | Holds |
 | --- | --- |
-| `SUPABASE_PROJECT_REF` | the project ref, from the Supabase dashboard |
+| `SUPABASE_MCP_URL` | the Supabase server address with `read_only`, `project_ref` and `features` set |
 | `PG_READONLY_URL` | a Postgres connection string for the read-only role |
 
 ## google-drive.mcp.json
