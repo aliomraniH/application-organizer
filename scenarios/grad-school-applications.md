@@ -50,6 +50,27 @@ All six.
 | Weekly sweep | Monday 06:00 | mid-tier, top only for judging A items | none; public APIs |
 | Post-sweep update | Monday 14:00 | cheapest | none |
 
+## The record
+
+The ledger lives in the tracker artifact; Sam sees it on the console page. All seven collections are used.
+
+| Collection | Rows at the end of week one |
+| --- | --- |
+| `programs` | 8, one per program, each with its two statements (`northfield`, ...) |
+| `snapshots` | 16, one per statement, written by the first nightly sync |
+| `events` | about 40: syncs carried, one conflict, two flags for cited facts without a claims row |
+| `tasks` | 12: the setup chat, 7 nightly syncs, the Monday sweep, the post-sweep update, 2 working chats |
+| `claims` | 5, forward-only: the cited sentences Sam edited this week, each verified at a primary page |
+| `findings` | 866 backfilled from the old prose ledger (`ledger-transcribed`, prompt 08), plus 31 from Monday's sweep |
+| `meta` | `config` (sync trigger, lock, last run) and `ledger` (project-ledger v1, counts, the backfill record) |
+
+The first rows written, in order:
+
+    set   · meta/ledger · {schemaVersion: "project-ledger v1", schemaDoc: "ledger-schema.md", collections, counts}
+    set   · programs/northfield · {name: "Northfield University", order: 1, statements: [{key: "sop", ...}, {key: "personal", ...}]}
+    set   · tasks/2026-10-21-setup · {task: "bootstrap", status: "in_progress", by: "the setup chat"}
+    batch · findings/<doc id> × 866 · {verified: "ledger-transcribed"}     (18 batches of 50 or fewer)
+
 ## A week in the pattern
 
 Monday's sweep finds a new paper by Dr. Example that complicates a sentence in the Northfield statement. The sweep adds row D-41 to the Decisions doc: "Northfield SOP v1.4, paragraph 3 cites the 2024 finding; a 2026 paper by Dr. Example narrows it to adolescents. Options: (a) add the qualifier, (b) cite both, (c) leave it. Default: leave it." On Tuesday Sam opens a chat to work on Northfield; decisions-queue asks D-41. Sam answers "a", edits the sentence in the doc, and document-sync carries it: published page, `program-files/northfield.md`, one register row, one change-log line. D-41 moves to Closed. Nobody asks again.

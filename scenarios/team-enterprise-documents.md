@@ -47,6 +47,26 @@ The [security rules](../extensions/connectors-and-mcp.md#security-rules) apply w
 5. Any server the team builds follows the MCP spec's security practices.
 6. The team's edits win over anything a source brings in; a conflict goes to the Decisions doc.
 
+## The record
+
+The team's ledger replaces the changelog tab as the record of what changed; the tab stays as the readable view. Each row names who wrote it (`by`), so the team lead can see whose run or chat did what.
+
+| Collection | Use | Rows at the end of week one |
+| --- | --- | --- |
+| `programs` | one row per controlled document: handbook sections, training deck, vendor summary, with approver and last sync | 3 |
+| `snapshots` | handbook sections and the vendor summary as last carried | 9 |
+| `events` | syncs, the database figure refreshed, decisions assigned (`decisionId`) | about 25 |
+| `tasks` | each person's working chats and each scheduled run | 14 |
+| `claims` | every figure the handbook quotes, each with the named query that produced it as its source | 6 |
+| `findings` | regulatory and vendor updates by registry or notice number | 11 |
+| `meta` | `config` and `ledger` | 2 |
+
+A database figure lands as a claims row, not prose: the source is the named query and its run time.
+
+    set · claims/handbook-s4-01 · {text: "Enrolment across sites: 214 in week 41.", source: {identifier: "query:weekly_enrolment_by_site", status: "primary-page"}, qualifier: "week 41; five sites", verifiedHow: "primary page", status: "verified"}
+
+source-check also tests the ledger itself: a viewer-level read of `meta/ledger` and a where-query on `tasks`.
+
 ## A week in the pattern
 
 The sweep finds a regulator's updated guidance and runs `weekly_enrolment_by_site` from `queries.md`. Two items bear on the handbook. The sweep adds rows D-12 (new guidance, assigned to the team lead) and D-13 (enrolment figure in section 4 is stale, assigned to the analyst). The analyst approves D-13; the team lead edits section 4 in the Doc; document-sync carries it to the Drive copy and the register. The training deck's register row shows a gate open ("section 4 figure changed") until someone updates the deck.

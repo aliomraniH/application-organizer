@@ -39,6 +39,23 @@ Security rules from [the connectors chapter](../extensions/connectors-and-mcp.md
 - Companies never to apply to.
 - Each fellowship's AI-use policy for essays.
 
+## The record
+
+Jordan's ledger uses five collections; `claims` and `snapshots` are optional because the documents carry few citations.
+
+| Collection | Use | Rows at the end of week one |
+| --- | --- | --- |
+| `programs` | one row per application: company or fellowship, role, deadline, resume variant, essay docs | 9 |
+| `events` | variant carried, application submitted (Jordan's word), interview booked | about 15 |
+| `tasks` | each working chat and each sweep run | 6 |
+| `findings` | the market sweep's record: one row per posting or announcement, keyed by its URL-derived id or registry number | 24 |
+| `meta` | `config` and `ledger` | 2 |
+
+Outreach stays in the Contact log, not in rows: a send is real only when Jordan says so.
+
+    set · programs/platform-role-northfield-health · {name, order: 3, statements: [{key: "resume", label: "Platform variant", version: "v2.1"}, {key: "cover", ...}]}
+    set · findings/<posting id> · {identifier, type: "registry", status: "bears-on-document", watched: true, direction: "supports", touches: ["cover ¶1"]}
+
 ## A week in the pattern
 
 The market sweep reports that a company on the watch list posted a director role and that Dr. Sample, a former colleague, now works there. It adds two Decisions-doc rows: apply (default: no) and ask Dr. Sample for a referral (default: no). Jordan answers yes to both. contact-log reads Dr. Sample's row (Replied closed, eight months ago), Claude drafts the note, logs it as Drafted, and ends with "Tell me when it's sent and I'll log it." Jordan sends it on Thursday and says so; the row moves to Sent awaiting with a next-step date.
