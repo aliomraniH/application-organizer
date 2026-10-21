@@ -1,0 +1,105 @@
+# Architecture
+
+The pattern has six layers. Each has one job, and each job lives in exactly one layer. Three authority rules hold them together. This page says what lives where, why, and how a change moves through.
+
+## The six layers
+
+```mermaid
+flowchart TB
+    I["1 Project instructions: where things live, authority rules, which skills"]
+    K["2 Project knowledge: stable-named files, overwritten in place"]
+    D["3 Editable docs: the single source of truth for anything a person edits"]
+    M["4 Memory: dated rules and decisions the person stated"]
+    S["5 Skills: one per recurring procedure"]
+    T["6 Scheduled tasks: short prompt that invokes a skill"]
+    I -->|points to| K
+    I -->|points to| D
+    I -->|names| S
+    T -->|invokes| S
+    S -->|reads and writes| D
+    S -->|overwrites| K
+    M -->|constrains| S
+```
+
+| Layer | Holds | Changes how often | Owner |
+| --- | --- | --- | --- |
+| Project instructions | where things live, authority rules, which skills | rarely | the person |
+| Project knowledge | stable-named files: register, sweep axes, per-document sources, skill fallbacks | per pass, in place | skills |
+| Editable docs | statements, Decisions doc, Contact log, evidence tracker, approved summary | daily | the person and Claude |
+| Memory | dated rules and decisions the person stated | when the person decides something | background pass |
+| Skills | one per recurring procedure | when a procedure changes | the person, via skill cards |
+| Scheduled tasks | short prompt + skill, cheap model, few connectors | weekly or nightly runs | the person |
+
+### 1. Project instructions
+
+Short: under 500 words. They say where things live, state the authority rules, name the skills that apply, and set one task per chat. They point to files instead of copying them, because every chat reads the instructions in full. Start from [templates/project-instructions.md](../templates/project-instructions.md).
+
+Why short: context is a budget. Anthropic's guidance on [context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) is to load the smallest set of high-signal tokens and fetch the rest just in time.
+
+### 2. Project knowledge
+
+A small set of files with **stable names**: `register.md`, `sweep-axes.md`, one source file per document, `ledger.md`, `evidence-tracker.md`, `summary.md`. Each is overwritten in place, and its version is written inside the file (front matter), not in the filename.
+
+Why stable: when a project's knowledge grows past what fits in context, Claude searches it ([RAG for Projects](https://support.claude.com/en/articles/11473015-retrieval-augmented-generation-rag-for-projects)). Ten dated copies of one statement mean search can return the wrong one. History already lives in the editable doc's version history.
+
+The one exception is the weekly sweep report, `sweep-<YYYY-MM-DD>.md`: one report per week is history, not a version of one thing.
+
+### 3. Editable docs
+
+One editable doc (a Claude Doc or equivalent, see [Get started with Claude Docs](https://support.claude.com/en/articles/16923645-get-started-with-claude-docs)) per thing a person edits:
+
+- each controlled document (a statement, an essay, a handbook section)
+- the **Decisions doc**: every question waiting on the person, with options and a default ([template](../templates/decisions-doc.md))
+- the **Contact log**: the only record of outreach ([template](../templates/contact-log.md))
+- the **evidence tracker**: one tab per theme, updated after each sweep
+- the **approved summary**: the statement of direction every other document must agree with
+
+Why one: copies multiply writes. Edits happen in the doc; the copies follow through document-sync.
+
+### 4. Memory
+
+Dated rules and decisions the person stated, in their words: "2026-10-02: never name my previous employer in a statement." Memory never holds status that changes weekly (which email was sent, which version is current). Status lives in the docs, where it is visible and correctable.
+
+### 5. Skills
+
+One per recurring procedure, each short (well under the 500-line ceiling in the [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)). Each ends its open questions as rows in the Decisions doc, never in chat. See [skills/README.md](../skills/README.md).
+
+### 6. Scheduled tasks
+
+Short prompts that invoke a skill. The cheapest model that can do the job. Only the connectors the task needs, because included connectors can use every tool, writes included, without asking during a run ([scheduled tasks](https://code.claude.com/docs/en/routines)). See [model-and-usage.md](model-and-usage.md).
+
+## The three authority rules
+
+1. **The person's words win** over any older text: a doc, a file, memory, a source.
+2. **Propose, wait for yes, then apply.** Nothing in a controlled document changes without the person's approval.
+3. **Sync carries text and never revises facts.** If something looks wrong during sync, it becomes a Decisions-doc row.
+
+## How a change flows
+
+Every change, whatever its source, passes through one approval and lands in one editable doc; the copies follow, and the record keeps what happened.
+
+```mermaid
+flowchart LR
+    A["Source: sweep finding, reviewer comment, the person's idea"] --> B["Decisions doc row with options and a default"]
+    B --> C{"The person answers"}
+    C -->|yes| D["Editable doc updated"]
+    C -->|no or silence| E["Default stays; row closed, never asked again"]
+    D --> F["document-sync carries text to published copy, project file, register"]
+    F --> G["Tracker event and register change log"]
+    C -.->|a durable rule stated| H["Memory: dated rule"]
+```
+
+The six stations: source, Decisions doc, approval, editable doc, sync, record. Only one of them needs the person.
+
+## What lives where, and why
+
+| Question | Answer lives in | Not in |
+| --- | --- | --- |
+| What is the current text of the statement? | its editable doc | a dated file, memory |
+| Which version is current, how many words, does it fit? | `register.md` | memory, chat |
+| Did I email Dr. Example? | Contact log | memory, an earlier chat |
+| What am I waiting to decide? | Decisions doc | a sweep report, a tracker note |
+| What did this week's sweep find? | `sweep-<date>.md` | the evidence tracker (it holds the synthesis) |
+| Never name my old employer | memory, as a dated rule | the Decisions doc (it is not pending) |
+| How to run the sync | `skills/document-sync/SKILL.md` | project instructions |
+| When the sync runs | a scheduled task | the skill |
