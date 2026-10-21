@@ -13,6 +13,8 @@ Model names change; this page uses tiers. Anthropic's [Choosing the right Claude
 | Sweep axis agents (search, verify, categorize) | mid-tier | Reads and judges many pages; volume matters |
 | Sweep prep (extracting sentences, building the exclusion list) | cheapest | Mechanical |
 | Source checks (source-check skill) | cheapest | Fixed probes, compared with a written expectation |
+| Ledger housekeeping: tasks rows, pruning, scripted backfill (project-ledger) | cheapest | Fixed row shapes; the backfill is a script |
+| Monthly capability check (capability-check) | cheapest for the diff; top only to judge a proposed schema change | Reads and compares; judgment only where a schema would change |
 | Judging whether a finding changes a current document | top | Only when such items exist, and only for those items |
 | Drafting or reviewing a statement, synthesis, approved-summary proposals | top | Judgment and voice |
 | Routine chat lookups ("what's the deadline for Northfield?") | mid-tier | Fast, cheap, reads a file |

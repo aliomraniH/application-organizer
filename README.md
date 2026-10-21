@@ -93,6 +93,8 @@ Audit this existing Claude Project and migrate it to the application-organizer p
 5. Shorten each scheduled task's prompt to a skill call, set the model I choose, and list the connectors to remove.
 6. Build the ledger: create the tracker artifact from templates/console-page.html if there is none, set up meta rows with the project-ledger skill, and backfill from prose by script, not by reading: programs rows from register.md, findings rows from any sweep ledger file (verified: "ledger-transcribed"). Show me a spot-check sample before the first write. Open a tasks row for this migration and close it at the end.
 7. Report before and after: file count, knowledge size, number of open decisions, number of contacts with unconfirmed status, and rows per ledger collection.
+
+You will create the stable files, the Decisions doc and Contact log, the tracker artifact with its ledger (meta rows, programs rows, any transcribed findings rows, a tasks row for this migration), trimmed memory, draft project instructions and shortened task prompts, and delete only what I confirmed.
 ```
 
 ### 03 — Set up the weekly sweep
@@ -107,6 +109,8 @@ Set up a weekly literature or market sweep for this project using the weekly-swe
 3. Create the scheduled task with a six-line prompt that invokes the skill, points at sweep-axes.md, names where the report goes, says that every identifier seen is written as a findings row, and says that every decision goes to the Decisions doc, never only into the report.
 4. If updating an evidence tracker or an approved summary follows the sweep, create a second task that runs later the same day on the cheapest model, so a failed sweep does not take the updates down with it.
 5. Run the sweep once now with "Run now", read the transcript, and tell me what it found, what it could not reach, and what to change in sweep-axes.md.
+
+You will create sweep-axes.md, the sweep task, the optional post-sweep task, one dated report, the findings rows from that first run, and any Decisions-doc rows it queued.
 ```
 
 ### 04 — Connect enterprise sources
@@ -151,6 +155,8 @@ Run my weekly review for this project (application-organizer pattern). One messa
 5. Setup: scheduled tasks' last run status (read the transcripts, not the status colour), knowledge size against the cap, and any dated file that still needs migrating to a stable name.
 6. Ledger: tasks rows still in_progress or stopped, with their open items; claims rows that are unverified or stale; findings rows that bear on a document with lastSeenSweep since my last review, each with its direction and the sentence it touches.
 Then wait for my answers and apply them through the skills that own each item, recording each answer in the Decisions doc.
+
+You will create nothing until I answer; then the answers go into the Decisions doc, a tasks row for this review, and whatever the owning skills write.
 ```
 
 ### 07 — Test connectors and MCP

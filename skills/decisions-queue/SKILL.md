@@ -27,7 +27,7 @@ A comment the person sends to Claude in a controlled doc is a decision made in p
 ## Before re-opening a question
 A new question that resembles a Closed row is checked against the record first:
 1. Read the Closed row and its date. Read the document as it stood then: `atRev` at the revision named in the row or its event.
-2. Read the cumulative record since: findings rows that touch the same sentence (`query · findings · where touches array-contains "<doc> ¶n"`), with count, direction and dates.
+2. Read the cumulative record since: findings rows that touch the same sentence (`query · findings · where touchesDocument == true`, then keep the rows whose `touches` names the sentence; or read the list on disk from the last sweep), with count, direction and dates.
 3. Add a new row only if the sentence changed since the decision or the cumulative record moved; say which, and cite the Closed row's ID. Otherwise do nothing: the decision still applies.
 
 ## Adding an item

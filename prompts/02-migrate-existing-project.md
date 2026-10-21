@@ -7,3 +7,5 @@ Audit this existing Claude Project and migrate it to the application-organizer p
 5. Shorten each scheduled task's prompt to a skill call, set the model I choose, and list the connectors to remove.
 6. Build the ledger: create the tracker artifact from templates/console-page.html if there is none, set up meta rows with the project-ledger skill, and backfill from prose by script, not by reading: programs rows from register.md, findings rows from any sweep ledger file (verified: "ledger-transcribed"). Show me a spot-check sample before the first write. Open a tasks row for this migration and close it at the end.
 7. Report before and after: file count, knowledge size, number of open decisions, number of contacts with unconfirmed status, and rows per ledger collection.
+
+You will create the stable files, the Decisions doc and Contact log, the tracker artifact with its ledger (meta rows, programs rows, any transcribed findings rows, a tasks row for this migration), trimmed memory, draft project instructions and shortened task prompts, and delete only what I confirmed.
