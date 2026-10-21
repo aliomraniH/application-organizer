@@ -5,4 +5,5 @@ Audit this existing Claude Project and migrate it to the application-organizer p
 3. Show me three lists: delete (history exists elsewhere), keep (current or unique), and move (status lines in memory that belong in a Decisions doc or Contact log).
 4. After my confirmation: write the stable files, delete the superseded ones, create the Decisions doc and Contact log from the templates and move the status lines into them, trim memory to dated rules, and draft project instructions for me to paste.
 5. Shorten each scheduled task's prompt to a skill call, set the model I choose, and list the connectors to remove.
-6. Report before and after: file count, knowledge size, number of open decisions, number of contacts with unconfirmed status.
+6. Build the ledger: create the tracker artifact from templates/console-page.html if there is none, set up meta rows with the project-ledger skill, and backfill from prose by script, not by reading: programs rows from register.md, findings rows from any sweep ledger file (verified: "ledger-transcribed"). Show me a spot-check sample before the first write. Open a tasks row for this migration and close it at the end.
+7. Report before and after: file count, knowledge size, number of open decisions, number of contacts with unconfirmed status, and rows per ledger collection.

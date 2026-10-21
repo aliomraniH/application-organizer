@@ -1,0 +1,7 @@
+Backfill the structured-memory ledger of this project from the prose records it has today, using the project-ledger skill (github.com/aliomraniH/application-organizer). Write rows, read papers never: this is a transcription pass, and it says so on every row.
+
+1. Ask me, in one message: which prose records exist (a sweep ledger, a register, a contact log, status lines in memory or reports), the tracker artifact's URL (or whether to create one from templates/console-page.html), and whether findings rows should carry a coarse status derived from section labels or none.
+2. Write a script that extracts identifiers (DOI, arXiv, PMC, PMID, ACL Anthology, trial registries, preprint servers) with the sweep date and section label of each mention, merges aliases, derives the coarse status if I said yes, and writes one JSON file per row plus batch manifests of 50. Spot-check a random sample of identifiers against the source file by exact search before any write; show me the sample.
+3. Write the rows in batches; show me the count and the collection size after each batch set. Set meta/ledger with the backfill record: source, rows, method, "ledger-transcribed", and the note that the source's own count may include repeats.
+4. Leave the prose record in place as history; point the sweep skill at the collection as its exclusion list; record the change in the project's change log and the tasks row.
+5. End with what is NOT in the rows (titles, dates, verification) and how the next sweep fills them in.
