@@ -1,0 +1,28 @@
+{
+  "identifier": "10.0000/example.2025.7",
+  "type": "doi",
+  "aliases": [],
+  "docId": "10.0000_example.2025.7",
+  "mentions": [
+    {
+      "sweep": "2026-10-19",
+      "date": "2026-10-19",
+      "label": "B"
+    }
+  ],
+  "sections": [
+    "B"
+  ],
+  "sweeps": 1,
+  "firstSeenSweep": "2026-10-19",
+  "lastSeenSweep": "2026-10-19",
+  "status": "reported",
+  "touchesDocument": false,
+  "watched": false,
+  "title": "A repeat of what the record holds",
+  "firstPublic": "2025-11-11",
+  "preprint": false,
+  "source": "crossref",
+  "verified": "primary page",
+  "synthetic": true
+}

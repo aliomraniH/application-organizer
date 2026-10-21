@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-18T10:00:00Z",
+  "kind": "ledger",
+  "status": "done",
+  "program": null,
+  "summary": "ledger created at project-ledger v1 (synthetic fixture)",
+  "by": "project-ledger",
+  "synthetic": true
+}

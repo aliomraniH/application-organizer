@@ -22,3 +22,6 @@ Read the person's row and the target's other rows. Do not draft to anyone marked
 
 ## Rules
 Never send anything; the person sends. Never put the person's own address anywhere new. Keep cells short; detail goes in the event log. Hygiene only when asked: rows past their next-step date, rows Drafted over a week, rows to confirm, in one message.
+
+## Related skills
+A question about a contact that only the person can settle (a send date nobody recorded, whether to follow up) becomes a row in the Decisions doc at <DECISIONS_DOC_URL> through decisions-queue, unless it is a to-confirm row that belongs in this log.

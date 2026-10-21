@@ -1,0 +1,22 @@
+{
+  "text": "In one sample of 212 adults, structured handoffs cut follow-up errors by about a third.",
+  "program": "northfield",
+  "key": "sop",
+  "docBlockId": "blk_example_p3",
+  "docRev": 42,
+  "source": {
+    "identifier": "10.0000/example.2026.1",
+    "url": "<primary page url>",
+    "title": "The handoff paper",
+    "firstPublic": "2026-03-02",
+    "status": "peer-reviewed"
+  },
+  "qualifier": "one sample of 212 adults; single site",
+  "verifiedAt": "2026-10-20",
+  "verifiedBy": "the person, library pass",
+  "verifiedHow": "full text",
+  "status": "verified",
+  "findingId": "10.0000_example.2026.1",
+  "decisionId": "D-41",
+  "synthetic": true
+}

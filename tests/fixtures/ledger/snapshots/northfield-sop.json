@@ -1,0 +1,23 @@
+{
+  "paragraphs": [
+    "I lead analyses; I did not design the trial.",
+    "Paragraph 2 (synthetic).",
+    "In one sample of 212 adults, structured handoffs cut follow-up errors by about a third."
+  ],
+  "blockIds": [
+    "blk_example_p1",
+    "blk_example_p2",
+    "blk_example_p3"
+  ],
+  "blockHashes": [
+    "a1b2c3d4",
+    "e5f60718",
+    "9a0b1c2d"
+  ],
+  "docRev": 42,
+  "masterVersion": "v1.4",
+  "meta": {},
+  "words": 998,
+  "verified": true,
+  "synthetic": true
+}

@@ -1,0 +1,35 @@
+{
+  "name": "application-organizer",
+  "owner": {
+    "name": "application-organizer contributors"
+  },
+  "description": "The application-organizer pattern as one Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "application-organizer",
+      "source": ".",
+      "description": "Nine skills for running a long, document-heavy campaign with Claude, with a structured-memory ledger: document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check, project-ledger, capability-check.",
+      "version": "0.3.0",
+      "license": "MIT",
+      "keywords": [
+        "documents",
+        "applications",
+        "decisions",
+        "sync",
+        "research-sweep",
+        "structured-memory"
+      ],
+      "skills": [
+        "./skills/document-sync",
+        "./skills/decisions-queue",
+        "./skills/contact-log",
+        "./skills/weekly-sweep",
+        "./skills/evidence-tracker",
+        "./skills/approved-summary",
+        "./skills/source-check",
+        "./skills/project-ledger",
+        "./skills/capability-check"
+      ]
+    }
+  ]
+}

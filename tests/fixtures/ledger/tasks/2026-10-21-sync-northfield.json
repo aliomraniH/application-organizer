@@ -1,0 +1,28 @@
+{
+  "startedAt": "2026-10-21T02:00:04Z",
+  "endedAt": "2026-10-21T02:03:41Z",
+  "chat": "scheduled run: nightly sync",
+  "task": "nightly sync",
+  "status": "done",
+  "docsRead": {
+    "doc_northfield_sop": {
+      "rev": 42,
+      "at": "2026-10-21T02:00:19Z"
+    }
+  },
+  "rowsRead": [
+    "meta/config",
+    "programs/northfield",
+    "snapshots/northfield-sop"
+  ],
+  "decisionsAsked": [],
+  "decisionsAnswered": [],
+  "changes": [
+    "Northfield SOP v1.3 to v1.4: paragraph 3 opening sentence carried to the published copy, program-files/northfield.md and register.md",
+    "claims/northfield-sop-03 docRev updated to 42"
+  ],
+  "open": [],
+  "by": "document-sync",
+  "model": "<cheapest model tier>",
+  "synthetic": true
+}

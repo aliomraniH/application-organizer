@@ -1,0 +1,30 @@
+{
+  "identifier": "10.0000/example.2024.3",
+  "type": "doi",
+  "aliases": [],
+  "docId": "10.0000_example.2024.3",
+  "mentions": [
+    {
+      "sweep": "2026-09-07",
+      "date": "2026-09-07",
+      "label": "A"
+    }
+  ],
+  "sections": [
+    "A"
+  ],
+  "sweeps": 1,
+  "firstSeenSweep": "2026-09-07",
+  "lastSeenSweep": "2026-09-07",
+  "status": "bears-on-document",
+  "touchesDocument": true,
+  "watched": false,
+  "direction": "supports",
+  "touches": [
+    "sop \u00b63"
+  ],
+  "weight": 2,
+  "source": "prose ledger",
+  "verified": "ledger-transcribed",
+  "synthetic": true
+}

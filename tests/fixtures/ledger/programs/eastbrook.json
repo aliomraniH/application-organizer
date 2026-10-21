@@ -1,0 +1,35 @@
+{
+  "name": "Eastbrook Institute",
+  "order": 2,
+  "master": {
+    "url": "<url>",
+    "version": "v0.3"
+  },
+  "source": {
+    "path": "program-files/eastbrook.md",
+    "version": "v0.3"
+  },
+  "statements": [
+    {
+      "key": "sop",
+      "label": "Statement of purpose",
+      "version": "v0.3",
+      "words": 450,
+      "fit": "2 pp; draft",
+      "limit": "2 pages",
+      "doc": {
+        "url": "<url>",
+        "docId": "doc_eastbrook_sop",
+        "tab": "main",
+        "node": null,
+        "syncedRev": 3,
+        "seenRev": 3
+      },
+      "snapshot": "snapshots/eastbrook-sop"
+    }
+  ],
+  "status": "draft",
+  "note": "",
+  "lastSyncAt": "2026-10-20T02:02:10Z",
+  "synthetic": true
+}

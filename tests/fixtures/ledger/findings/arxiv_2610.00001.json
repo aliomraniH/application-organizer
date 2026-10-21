@@ -1,0 +1,27 @@
+{
+  "identifier": "arxiv:2610.00001",
+  "type": "arxiv",
+  "aliases": [],
+  "docId": "arxiv_2610.00001",
+  "mentions": [
+    {
+      "sweep": "2026-10-19",
+      "date": "2026-10-19",
+      "label": "UNREAD"
+    }
+  ],
+  "sections": [
+    "UNREAD"
+  ],
+  "sweeps": 1,
+  "firstSeenSweep": "2026-10-19",
+  "lastSeenSweep": "2026-10-19",
+  "status": "unread",
+  "touchesDocument": false,
+  "watched": true,
+  "title": "A preprint behind a login",
+  "preprint": true,
+  "source": "arxiv",
+  "verified": "primary page",
+  "synthetic": true
+}

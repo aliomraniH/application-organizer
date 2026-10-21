@@ -1,0 +1,26 @@
+{
+  "startedAt": "2026-10-21T15:10:00Z",
+  "chat": "working chat",
+  "task": "draft Eastbrook SOP paragraph 2",
+  "status": "in_progress",
+  "docsRead": {
+    "doc_eastbrook_sop": {
+      "rev": 3,
+      "at": "2026-10-21T15:10:30Z"
+    }
+  },
+  "rowsRead": [
+    "programs/eastbrook"
+  ],
+  "decisionsAsked": [
+    "D-44"
+  ],
+  "decisionsAnswered": [],
+  "changes": [],
+  "open": [
+    "D-44 unanswered"
+  ],
+  "by": "the person",
+  "model": "<top>",
+  "synthetic": true
+}

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "reporting-db-supabase": {
+      "type": "http",
+      "url": "${SUPABASE_MCP_URL}"
+    },
+    "reporting-db-reference": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${PG_READONLY_URL}"]
+    }
+  }
+}
