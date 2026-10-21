@@ -21,7 +21,7 @@ AUTHORITY RULES
 - <Facts that must stay exact, names never to use, voice rules: one line each, or a pointer to the memory file that holds them.>
 
 SKILLS FOR THIS PROJECT
-document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, plus docs and the file-format skills when a file is asked for. Do not use unrelated skills here unless named.
+document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check (if the project reads connectors or MCP servers; sources listed in sources.md), plus docs and the file-format skills when a file is asked for. Do not use unrelated skills here unless named.
 
 MODELS AND USAGE
 Routine lookups, logging and syncing: the mid-tier model. Document passes, reviews and synthesis: the top model. Keep chats short; a new task gets a new chat.

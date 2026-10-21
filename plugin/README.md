@@ -1,6 +1,6 @@
 # Plugin
 
-The six skills install together as one Claude Code plugin ([plugins docs](https://code.claude.com/docs/en/plugins)).
+The seven skills install together as one Claude Code plugin ([plugins docs](https://code.claude.com/docs/en/plugins)).
 
 ## Install
 
@@ -24,7 +24,7 @@ From a shell:
 Claude Code reads a marketplace only from `.claude-plugin/marketplace.json` at the marketplace root, so the file lives there, at the repository root, not in this folder. Its one entry:
 
 - `source` is `"."`, the repository root, so the root is the plugin.
-- `skills` lists the six folders under `skills/`, so only those load. The docs, prompts and templates are copied with the plugin but are not components.
+- `skills` lists the seven folders under `skills/`, so only those load. The docs, prompts and templates are copied with the plugin but are not components.
 - With no `plugin.json`, the marketplace entry is the manifest: name, version, description, license and keywords live in it.
 
 BRIEF.md placed the manifest and marketplace entry in this folder. They moved because Claude Code does not look here, and a plugin cannot load skills from outside its own root.

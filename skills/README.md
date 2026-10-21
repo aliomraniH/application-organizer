@@ -1,6 +1,6 @@
 # Skills
 
-Six skills, one per recurring procedure. Each is short, follows Anthropic's [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices), and sends its questions to the Decisions doc instead of leaving them in chat.
+Seven skills, one per recurring procedure. Each is short, follows Anthropic's [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices), and sends its questions to the Decisions doc instead of leaving them in chat.
 
 | Skill | When it triggers | Doc it owns |
 | --- | --- | --- |
@@ -10,6 +10,7 @@ Six skills, one per recurring procedure. Each is short, follows Anthropic's [ski
 | [weekly-sweep](weekly-sweep/SKILL.md) | When the sweep task fires or the person asks for a sweep | `sweep-<YYYY-MM-DD>.md` reports and `ledger.md` |
 | [evidence-tracker](evidence-tracker/SKILL.md) | When the post-sweep task fires or the person dictates a tracker change | The evidence tracker doc and `evidence-tracker.md` |
 | [approved-summary](approved-summary/SKILL.md) | When the person says update or approve the summary, dictates a change, or the post-sweep task asks for the weekly proposal | The approved summary doc, `summary.md` and `summary-PROPOSED.md` |
+| [source-check](source-check/SKILL.md) | After a source is added or changed, before the first scheduled run that depends on it, when the source-check task fires, or on request | `sources.md` (results and change log) |
 
 ## Installing
 

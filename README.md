@@ -21,17 +21,17 @@ Six layers, each with one job: short **project instructions**; **project knowled
 ## Quick start (10 minutes)
 
 1. **Create a Claude Project** for your campaign on claude.ai.
-2. **Save the skills.** Add each folder in [skills/](skills/) as a skill in your account (one `SKILL.md` per skill). Start with document-sync, decisions-queue and contact-log; add the others when you set up a sweep. Claude Code users can copy them into `.claude/skills/` or install all six as a [plugin](plugin/README.md): `/plugin install application-organizer --marketplace aliomraniH/application-organizer`.
+2. **Save the skills.** Add each folder in [skills/](skills/) as a skill in your account (one `SKILL.md` per skill). Start with document-sync, decisions-queue and contact-log; add the others when you set up a sweep. Claude Code users can copy them into `.claude/skills/` or install them all as a [plugin](plugin/README.md): `/plugin install application-organizer --marketplace aliomraniH/application-organizer`.
 3. **Paste prompt 01** ([Bootstrap a project](prompts/01-bootstrap-project.md), below) into a new chat in the project and answer its questions in one reply. If you already have a project, use prompt 02 instead.
 4. **Let it create** your Decisions doc, Contact log, one editable doc per document, and the stable project files. Open each link once.
 5. **Paste the project instructions** it wrote into the project's instructions field, and check the dated rules it saved to memory.
-6. **Finish the checklist** it ends with: connect any connector you named, remove unneeded connectors from scheduled tasks, and run [prompt 06](prompts/06-weekly-review.md) at the end of your first week.
+6. **Finish the checklist** it ends with: connect any connector you named, remove unneeded connectors from scheduled tasks, and run [prompt 06](prompts/06-weekly-review.md) at the end of your first week. If you connected sources, run [prompt 07](prompts/07-test-connectors-and-mcp.md) to test them before the first sweep.
 
 You now have a working project: every question for you lives in one doc, every contact in another, and every document has one editable home.
 
 ## Start here
 
-The six starter prompts, copied unchanged from [prompts/](prompts/). Each asks its own questions in one numbered block and says what it will create. See [prompts/README.md](prompts/README.md) for how they fit together.
+The seven starter prompts, copied unchanged from [prompts/](prompts/). Each asks its own questions in one numbered block and says what it will create. See [prompts/README.md](prompts/README.md) for how they fit together.
 
 ### 01 — Bootstrap a project
 
@@ -131,6 +131,29 @@ Run my weekly review for this project (application-organizer pattern). One messa
 Then wait for my answers and apply them through the skills that own each item, recording each answer in the Decisions doc.
 ```
 
+### 07 — Test connectors and MCP
+
+File: [prompts/07-test-connectors-and-mcp.md](prompts/07-test-connectors-and-mcp.md)
+
+```text
+Set up and run the source tests for this project using the source-check skill (github.com/aliomraniH/application-organizer). Test first, change nothing: no write tool enabled, no scope widened, no credential pasted.
+
+1. Ask me, in one message:
+   a. Which sources this project reads: connectors in claude.ai, MCP servers in Claude Code (.mcp.json), public APIs, databases. Say for each whether it should be read-only.
+   b. The scope of each: the folders, spaces, channels, schemas or watch lists it may read, and one thing just outside that scope it must not reach.
+   c. One harmless read for each that proves it works (a search term, a file name, a named query), and what a normal result looks like (roughly how many items, which fields).
+   d. For each database: the named harmless write to attempt against the read-only role, inside a transaction that is rolled back.
+   e. Which scheduled tasks use which sources, and the names of the environment variables that hold any secrets (names only, never values).
+   f. Whether to run the check on a schedule, on what day and time, and on which model (the cheapest is the default).
+2. Write sources.md from templates/sources.md as a stable project file: one row per source, its probes, an empty results table, a change log.
+3. Run the source-check skill once now, with me watching. Show me a table of source by check (Pass, Fail, Unverified) and, for each Fail or Unverified, what you saw.
+4. Add a Decisions-doc row for each Fail, and for each Unverified that blocks a scheduled task, with options and the default "pause the dependent task". Do not fix anything yourself.
+5. If I asked for a schedule, create a scheduled task with a short prompt that invokes source-check and points at sources.md, on the model I chose, carrying exactly the connectors under test and no others. Schedule it to run before the tasks that depend on those sources.
+6. End with what I must do myself: settings only I can see or change (tool approval levels, task connectors, sign-ins), and the rows still Unverified.
+
+You will create sources.md, the Decisions-doc rows for anything that failed, and, if I asked, one scheduled task.
+```
+
 ## Link map
 
 | You want | Go to |
@@ -139,14 +162,15 @@ Then wait for my answers and apply them through the skills that own each item, r
 | Why each rule exists | [docs/lessons.md](docs/lessons.md) |
 | Which model for which task; scheduled-task hygiene; context budget | [docs/model-and-usage.md](docs/model-and-usage.md) |
 | What never goes in a public repo or shared doc; placeholders | [docs/privacy.md](docs/privacy.md) |
-| The six skills, when each triggers, which doc it owns | [skills/README.md](skills/README.md) |
+| The seven skills, when each triggers, which doc it owns | [skills/README.md](skills/README.md) |
 | The starter prompts and their order | [prompts/README.md](prompts/README.md) |
 | Worked example: graduate-school applications | [scenarios/grad-school-applications.md](scenarios/grad-school-applications.md) |
 | Worked example: a job or fellowship search | [scenarios/job-or-fellowship-search.md](scenarios/job-or-fellowship-search.md) |
 | Worked example: a small team on enterprise documents | [scenarios/team-enterprise-documents.md](scenarios/team-enterprise-documents.md) |
 | Connectors, MCP servers, databases, security rules | [extensions/connectors-and-mcp.md](extensions/connectors-and-mcp.md) |
+| Testing connectors and MCP servers: the source-check skill and `sources.md` | [extensions/connectors-and-mcp.md](extensions/connectors-and-mcp.md#testing-sources) |
 | `.mcp.json` examples with placeholders for secrets | [extensions/mcp-config-examples/](extensions/mcp-config-examples/README.md) |
-| Templates: instructions, register, sweep axes, Decisions doc, Contact log | [templates/](templates/) |
+| Templates: instructions, register, sweep axes, sources, Decisions doc, Contact log | [templates/](templates/) |
 | Installing the skills as one plugin | [plugin/README.md](plugin/README.md) |
 | How to contribute; the privacy check | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | The brief this repo was built from | [BRIEF.md](BRIEF.md) |

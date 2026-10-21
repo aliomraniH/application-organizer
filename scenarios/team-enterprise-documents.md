@@ -25,6 +25,7 @@ The team's failure mode: a decision made in Slack reaches the handbook but not t
 - **decisions-queue**: rows assigned to a person; status set by that person.
 - **weekly-sweep**: regulatory and vendor updates, plus one read-only database query for the week's numbers.
 - **evidence-tracker**: one tab per regulatory area, plus the changelog tab.
+- **source-check**: tests Drive, SharePoint, Slack and the database every week against `sources.md`, before the sweep runs.
 - **contact-log** if the team tracks vendor correspondence; **approved-summary** if there is a single statement of direction.
 
 ### Connectors and MCP
@@ -35,7 +36,7 @@ The team's failure mode: a decision made in Slack reaches the handbook but not t
 | Slack | Slack connector ([Slack](https://claude.com/docs/connectors/slack/index)) | read-only: decisions already made |
 | Postgres | MCP server with a read-only role ([example](../extensions/mcp-config-examples/postgres-readonly.mcp.json)) | SELECT on one schema, named queries only |
 
-Set up with [prompt 04](../prompts/04-connect-enterprise-sources.md) and [prompt 05](../prompts/05-add-a-database.md).
+Set up with [prompt 04](../prompts/04-connect-enterprise-sources.md) and [prompt 05](../prompts/05-add-a-database.md), then test with [prompt 07](../prompts/07-test-connectors-and-mcp.md): the **source-check** skill runs Sunday night on the cheapest model, before the Monday sweep, and records results in `sources.md`.
 
 ### Security rules (in full)
 The [security rules](../extensions/connectors-and-mcp.md#security-rules) apply without exception:
@@ -51,4 +52,4 @@ The [security rules](../extensions/connectors-and-mcp.md#security-rules) apply w
 The sweep finds a regulator's updated guidance and runs `weekly_enrolment_by_site` from `queries.md`. Two items bear on the handbook. The sweep adds rows D-12 (new guidance, assigned to the team lead) and D-13 (enrolment figure in section 4 is stale, assigned to the analyst). The analyst approves D-13; the team lead edits section 4 in the Doc; document-sync carries it to the Drive copy and the register. The training deck's register row shows a gate open ("section 4 figure changed") until someone updates the deck.
 
 ## Start here
-Run [prompt 01](../prompts/01-bootstrap-project.md) with the team lead as the person, then 04 and 05.
+Run [prompt 01](../prompts/01-bootstrap-project.md) with the team lead as the person, then 04, 05 and 07.

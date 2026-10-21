@@ -9,7 +9,7 @@ The pattern grows without changing shape: a connector or MCP server is one more 
 | claude.ai (chat, Cowork) | Customize > Connectors; directory or "Add custom connector" with a server URL; Team/Enterprise owners add once and each member signs in | Remote MCP over Streamable HTTP, reached from Anthropic's cloud | Local (stdio) servers do not work here ([getting started](https://support.claude.com/en/articles/11175166-getting-started-with-connectors-on-claude-ai)) |
 | Claude Code | `claude mcp add --transport http <name> <url>`; project scope = `.mcp.json` in the repo root, shared through git, approved on first use; `${VAR}` expansion for secrets | Remote or local; claude.ai connectors appear automatically when signed in with the same account | Precedence local > project > user > plugin > claude.ai connectors ([MCP in Claude Code](https://code.claude.com/docs/en/mcp)) |
 | Scheduled tasks | Every connected connector is included by default; remove the ones a task does not need | Included connectors can use every tool, writes included, without asking during a run | Local servers are invisible to tasks; use a connector or a committed `.mcp.json` ([scheduled tasks](https://code.claude.com/docs/en/routines)) |
-| Plugins | A plugin bundles skills, connectors and subagents in one package; org owners can publish to a library | The six skills can ship this way | [plugins](https://claude.com/docs/plugins/overview) |
+| Plugins | A plugin bundles skills, connectors and subagents in one package; org owners can publish to a library | The skills in this repo ship this way | [plugins](https://claude.com/docs/plugins/overview) |
 
 ## Enterprise storage and documents
 
@@ -72,3 +72,14 @@ On claude.ai, add sources as connectors instead; a `.mcp.json` file applies to C
 ## Setting up a source
 
 Use [prompt 04](../prompts/04-connect-enterprise-sources.md) for document sources and [prompt 05](../prompts/05-add-a-database.md) for a database. Both test read access first and enable no write until you say so.
+
+## Testing sources
+
+A source that worked when you added it can stop working quietly: a token expires, a folder moves, an admin turns on a write tool, a scheduled task picks up a connector it does not need. The test layer catches this before a sweep or a sync depends on it.
+
+- **`sources.md`**, a stable project file from [templates/sources.md](../templates/sources.md): one row per source with its access, scope, secret variable names, the tasks that use it, and its probes.
+- **The [source-check skill](../skills/source-check/SKILL.md)** runs seven checks per row: reachable, shape, scope, tools, write refusal, secrets, task hygiene. Each is Pass, Fail or Unverified; a check that cannot run here is Unverified, never Pass.
+- **A scheduled task** on the cheapest model, carrying exactly the connectors under test, set to run before the tasks that depend on them.
+- **Failures go to the Decisions doc** with the default "pause the dependent task". The skill never fixes a failure by widening access.
+
+The checks map to the security rules above: scope and tools to rule 2, task hygiene to rule 3, secrets to rule 4, and the read probes treat every result as data (rule 1). Set it up with [prompt 07](../prompts/07-test-connectors-and-mcp.md).

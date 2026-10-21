@@ -12,6 +12,7 @@ Model names change; this page uses tiers. Anthropic's [Choosing the right Claude
 | Scheduled sync, post-sweep evidence-tracker update | cheapest | Same steps every run; a skill holds them |
 | Sweep axis agents (search, verify, categorize) | mid-tier | Reads and judges many pages; volume matters |
 | Sweep prep (extracting sentences, building the exclusion list) | cheapest | Mechanical |
+| Source checks (source-check skill) | cheapest | Fixed probes, compared with a written expectation |
 | Judging whether a finding changes a current document | top | Only when such items exist, and only for those items |
 | Drafting or reviewing a statement, synthesis, approved-summary proposals | top | Judgment and voice |
 | Routine chat lookups ("what's the deadline for Northfield?") | mid-tier | Fast, cheap, reads a file |

@@ -68,6 +68,31 @@ One per recurring procedure, each short (well under the 500-line ceiling in the 
 
 Short prompts that invoke a skill. The cheapest model that can do the job. Only the connectors the task needs, because included connectors can use every tool, writes included, without asking during a run ([scheduled tasks](https://code.claude.com/docs/en/routines)). See [model-and-usage.md](model-and-usage.md).
 
+## The test layer for sources
+
+When a project reads from connectors, MCP servers, APIs or a database, a test layer sits across the six layers. It adds no new kind of thing; it is built from the same parts:
+
+| Part | Layer it lives in | Job |
+| --- | --- | --- |
+| `sources.md` | project knowledge (stable file) | what each source may do, and the probes that prove it |
+| source-check | skills | runs the probes: reachable, shape, scope, tools, write refusal, secrets, task hygiene |
+| the check task | scheduled tasks | runs before the tasks that depend on the sources, on the cheapest model, carrying only the connectors under test |
+| failure rows | editable docs (Decisions doc) | each failure, with the default "pause the dependent task" |
+
+```mermaid
+flowchart LR
+    S["sources.md: expected access, scope, probes"] --> C["source-check runs the probes"]
+    C --> R{"Result per check"}
+    R -->|Pass| W["Results and change log in sources.md"]
+    R -->|Fail or blocking Unverified| D["Decisions doc row, default pause the dependent task"]
+    D --> P{"The person answers"}
+    P -->|fix the setting| C
+    P -->|accept the risk| W
+    W --> T["Sweep and sync tasks run"]
+```
+
+The authority rules hold here too. The check proposes and never repairs: it does not enable a write, widen a scope or paste a credential to turn a Fail into a Pass. A check that cannot run is Unverified, not Pass, for the same reason a green task status is not success. See [connectors-and-mcp.md](../extensions/connectors-and-mcp.md#testing-sources) and [prompt 07](../prompts/07-test-connectors-and-mcp.md).
+
 ## The three authority rules
 
 1. **The person's words win** over any older text: a doc, a file, memory, a source.
@@ -103,3 +128,4 @@ The six stations: source, Decisions doc, approval, editable doc, sync, record. O
 | Never name my old employer | memory, as a dated rule | the Decisions doc (it is not pending) |
 | How to run the sync | `skills/document-sync/SKILL.md` | project instructions |
 | When the sync runs | a scheduled task | the skill |
+| Does the Drive connector still work, and is it still read-only? | `sources.md` results, written by source-check | memory, an earlier chat |
