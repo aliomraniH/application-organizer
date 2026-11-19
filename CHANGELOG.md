@@ -21,7 +21,7 @@ What four weeks of finishing and submitting taught: one source with rendered vie
 - **Pattern audit.** Skill `pattern-audit` (nine checks with evidence); `templates/ledger_lint.py` (row shapes, stale counts, rows left open, phases, requirements past their start-by, addresses in rows); prompt 12, Pattern audit; prompt 13, Memory digest.
 - The weekly sweep reports coverage per source and calls a week with a refused source PARTIAL COVERAGE.
 - Lessons 21 to 28; lesson 1 amended.
-- `tests/scripts.test.py` and `tests/fixtures/campaign/`: 25 tests over a synthetic two-target ledger.
+- `tests/scripts.test.py` and `tests/fixtures/two-targets/`: 25 tests over a synthetic two-target ledger.
 - Templates `requirement-row.json`, `contact-row.json`, `review-row.json`; `sweep-axes.md` gains axes for after submission.
 - Plugin: thirteen skills.
 

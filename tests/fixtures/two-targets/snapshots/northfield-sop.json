@@ -1,0 +1,21 @@
+{
+  "paragraphs": [
+    "I spent six years building scheduling software for community clinics. In one sample of 212 adults, structured handoffs cut follow-up errors by about a third (Example et al., 2026).",
+    "At Northfield University I would work with Dr. Example on how handoff notes are written.",
+    "I want to learn to test these questions properly."
+  ],
+  "blockIds": [
+    "b1",
+    "b2",
+    "b3"
+  ],
+  "blockHashes": [
+    "h1",
+    "h2",
+    "h3"
+  ],
+  "docRev": 42,
+  "words": 998,
+  "verified": true,
+  "synthetic": true
+}

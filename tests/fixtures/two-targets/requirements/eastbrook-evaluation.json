@@ -1,0 +1,19 @@
+{
+  "program": "eastbrook",
+  "item": "Credential evaluation of the foreign degree",
+  "kind": "evaluation",
+  "owner": "institution",
+  "due": "2026-11-15",
+  "leadDays": 30,
+  "status": "received",
+  "source": {
+    "url": "<requirements page url>",
+    "quote": "Degrees earned abroad require a course-by-course evaluation.",
+    "readAt": "2026-10-12"
+  },
+  "evidence": "portal shows received, the person, chat 2026-11-12",
+  "note": "",
+  "updatedAt": "2026-11-12",
+  "updatedBy": "the person, chat 2026-11-12",
+  "synthetic": true
+}

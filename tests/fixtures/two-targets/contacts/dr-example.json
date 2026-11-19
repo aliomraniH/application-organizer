@@ -1,0 +1,15 @@
+{
+  "name": "Dr. Example",
+  "organization": "Northfield University",
+  "program": "northfield",
+  "role": "prospect",
+  "status": "Sent awaiting",
+  "sent": [
+    "2026-11-02"
+  ],
+  "nextStep": "follow up once",
+  "nextDue": "2026-11-16",
+  "logRev": 17,
+  "updatedAt": "2026-11-02",
+  "synthetic": true
+}

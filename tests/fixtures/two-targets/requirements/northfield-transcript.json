@@ -1,0 +1,19 @@
+{
+  "program": "northfield",
+  "item": "Official transcript, sent by the registrar",
+  "kind": "transcript",
+  "owner": "institution",
+  "due": "2026-12-01",
+  "leadDays": 21,
+  "status": "todo",
+  "source": {
+    "url": "<requirements page url>",
+    "quote": "Official transcripts must be received by the deadline.",
+    "readAt": "2026-11-10"
+  },
+  "contact": "registrar",
+  "note": "",
+  "updatedAt": "2026-11-10",
+  "updatedBy": "Claude, primary page",
+  "synthetic": true
+}

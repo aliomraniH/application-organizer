@@ -1,0 +1,23 @@
+{
+  "startedAt": "2026-11-18T17:00:00Z",
+  "chat": "Northfield SOP review",
+  "task": "review loop on paragraph 2",
+  "status": "in_progress",
+  "goal": "Make paragraph 2 say what I would study, in under 120 words, without adding a method I have not chosen.",
+  "docsRead": {
+    "doc_northfield_sop": {
+      "rev": 42,
+      "at": "2026-11-18T17:01:00Z"
+    }
+  },
+  "rowsRead": [
+    "programs/northfield"
+  ],
+  "decisionsAsked": [],
+  "decisionsAnswered": [],
+  "changes": [],
+  "open": [],
+  "by": "Claude (interactive)",
+  "model": "top",
+  "synthetic": true
+}
