@@ -34,7 +34,7 @@ Each test is named for the failure the gate stops:
 - a contradicted source takes no waiver; an unverified row, a number verified from metadata, an unlabelled preprint, unlabelled unpublished data and an overdue re-check each fail
 - any edit after the gate returns the document to draft; a preview or a failed gate is never final
 
-## fixtures/campaign/ and scripts.test.py
+## fixtures/two-targets/ and scripts.test.py
 
     python3 tests/scripts.test.py               # standard library only
 

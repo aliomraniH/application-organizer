@@ -1,0 +1,16 @@
+{
+  "name": "Dr. Sample",
+  "organization": "Eastbrook Institute",
+  "role": "recommender",
+  "status": "Replied closed",
+  "sent": [
+    "2026-11-03"
+  ],
+  "lastReplyAt": "2026-11-04",
+  "nextStep": "confirm the letter arrived",
+  "nextDue": "2026-11-24",
+  "requirement": "northfield-letter-1",
+  "logRev": 17,
+  "updatedAt": "2026-11-04",
+  "synthetic": true
+}

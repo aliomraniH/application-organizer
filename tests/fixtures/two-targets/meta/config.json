@@ -1,0 +1,9 @@
+{
+  "triggerId": null,
+  "lastRun": null,
+  "lock": null,
+  "schedule": "nightly while any target is drafting",
+  "runbook": "document-sync",
+  "contactLogRev": 17,
+  "synthetic": true
+}

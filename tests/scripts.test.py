@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Tests for templates/render_views.py, review_verdict.py and ledger_lint.py.
-Synthetic fixtures only (tests/fixtures/campaign).
+Synthetic fixtures only (tests/fixtures/two-targets).
 
     python3 tests/scripts.test.py
 """
@@ -18,7 +18,7 @@ import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-FIX = os.path.join(HERE, "fixtures", "campaign")
+FIX = os.path.join(HERE, "fixtures", "two-targets")
 TODAY = datetime.date(2026, 11, 18)
 
 

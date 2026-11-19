@@ -1,0 +1,19 @@
+{
+  "program": "northfield",
+  "item": "Statement of purpose",
+  "kind": "document",
+  "owner": "person",
+  "document": "northfield-sop",
+  "due": "2026-12-01",
+  "leadDays": 0,
+  "status": "todo",
+  "source": {
+    "url": "<requirements page url>",
+    "quote": "A statement of purpose of no more than 1,000 words.",
+    "readAt": "2026-11-10"
+  },
+  "note": "",
+  "updatedAt": "2026-11-10",
+  "updatedBy": "Claude, primary page",
+  "synthetic": true
+}

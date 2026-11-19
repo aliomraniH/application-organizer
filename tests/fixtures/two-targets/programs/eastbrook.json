@@ -1,0 +1,49 @@
+{
+  "name": "Eastbrook Institute",
+  "order": 2,
+  "phase": "submitted",
+  "deadline": "2026-11-15",
+  "submittedAt": "2026-11-14",
+  "policy": {
+    "mode": "open",
+    "note": "No policy published on the admissions or graduate school pages",
+    "sourceUrl": "<admissions page url>",
+    "quote": "",
+    "readAt": "2026-10-30",
+    "readBy": "Claude, primary page"
+  },
+  "statements": [
+    {
+      "key": "sop",
+      "label": "Statement of purpose",
+      "version": "v2.0",
+      "words": 742,
+      "fit": "750 words; 2 pp",
+      "limit": "750 words",
+      "doc": {
+        "url": "<url>",
+        "docId": "doc_eastbrook_sop",
+        "tab": "main",
+        "node": null,
+        "syncedRev": 18,
+        "seenRev": 18
+      },
+      "snapshot": "snapshots/eastbrook-sop",
+      "status": "submitted",
+      "gateOpen": 0,
+      "final": {
+        "hash": "<sha-256>",
+        "at": "2026-11-14"
+      },
+      "submitted": {
+        "hash": "<sha-256>",
+        "at": "2026-11-14",
+        "source": "the person, chat 2026-11-14"
+      }
+    }
+  ],
+  "status": "active",
+  "note": "",
+  "lastSyncAt": "2026-11-14T02:01:00Z",
+  "synthetic": true
+}

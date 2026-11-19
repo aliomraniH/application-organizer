@@ -1,0 +1,36 @@
+{
+  "scale": 180,
+  "calibration": [
+    {
+      "reader": "A",
+      "x": 141,
+      "y": 144
+    },
+    {
+      "reader": "B",
+      "x": 139,
+      "y": 138
+    }
+  ],
+  "maxRounds": 3,
+  "rounds": [
+    {
+      "label": "draft B",
+      "reads": [
+        {
+          "reader": "A",
+          "order": "current-first",
+          "current": 146,
+          "candidate": 145
+        },
+        {
+          "reader": "B",
+          "order": "candidate-first",
+          "current": 144,
+          "candidate": 145
+        }
+      ]
+    }
+  ],
+  "synthetic": true
+}

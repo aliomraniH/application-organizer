@@ -1,0 +1,36 @@
+{
+  "schemaDoc": "ledger-schema.md",
+  "schemaVersion": "project-ledger v1",
+  "collections": [
+    "programs",
+    "snapshots",
+    "events",
+    "tasks",
+    "claims",
+    "findings",
+    "meta",
+    "spans",
+    "gates",
+    "requirements",
+    "contacts",
+    "reviews"
+  ],
+  "counts": {
+    "programs": 2,
+    "snapshots": 1,
+    "events": 2,
+    "tasks": 2,
+    "requirements": 4,
+    "contacts": 3,
+    "reviews": 1
+  },
+  "gates": {
+    "version": "gates 1",
+    "enabledAt": "2026-11-01",
+    "tool": "final_check.py.txt"
+  },
+  "backfill": null,
+  "lastFindingsWrite": null,
+  "lastClaimsWrite": null,
+  "synthetic": true
+}

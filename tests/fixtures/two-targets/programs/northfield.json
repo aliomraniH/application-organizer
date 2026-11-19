@@ -1,0 +1,42 @@
+{
+  "name": "Northfield University",
+  "order": 1,
+  "phase": "drafting",
+  "deadline": "2026-12-01",
+  "policy": {
+    "mode": "own-words",
+    "sourceUrl": "<policy page url>",
+    "quote": "The statement must be written by the applicant.",
+    "readAt": "2026-11-10",
+    "readBy": "Claude, primary page"
+  },
+  "statements": [
+    {
+      "key": "sop",
+      "label": "Statement of purpose",
+      "version": "v1.4",
+      "words": 998,
+      "fit": "1,000 words; 2 pp",
+      "limit": "1000 words",
+      "doc": {
+        "url": "<url>",
+        "docId": "doc_northfield_sop",
+        "tab": "main",
+        "node": null,
+        "syncedRev": 42,
+        "seenRev": 42
+      },
+      "snapshot": "snapshots/northfield-sop",
+      "status": "draft",
+      "gateOpen": 2,
+      "final": null
+    }
+  ],
+  "views": {
+    "page": "<url>"
+  },
+  "status": "active",
+  "note": "",
+  "lastSyncAt": "2026-11-17T02:03:41Z",
+  "synthetic": true
+}

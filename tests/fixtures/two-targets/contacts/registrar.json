@@ -1,0 +1,13 @@
+{
+  "name": "Registrar's office",
+  "organization": "the person's previous university",
+  "role": "office",
+  "status": "Not contacted",
+  "sent": [],
+  "nextStep": "order the official transcript",
+  "nextDue": "2026-11-10",
+  "requirement": "northfield-transcript",
+  "logRev": 17,
+  "updatedAt": "2026-11-10",
+  "synthetic": true
+}
