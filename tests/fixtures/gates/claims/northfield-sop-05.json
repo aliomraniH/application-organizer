@@ -1,0 +1,9 @@
+{
+  "program": "northfield", "key": "sop", "kind": "unpublished",
+  "span": "Our internal pilot, still unpublished, suggests nurses read short notes first.",
+  "text": "Our internal pilot, still unpublished, suggests nurses read short notes first.",
+  "source": { "identifier": "the person, chat 2026-11-18", "status": "person" },
+  "qualifier": "internal pilot; no figure stated",
+  "verifiedAt": "2026-11-18", "verifiedBy": "the person", "verifiedHow": "the person's account",
+  "status": "verified", "synthetic": true
+}

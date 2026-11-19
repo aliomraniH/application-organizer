@@ -74,10 +74,10 @@ Public page: [Claude Code plugins](https://code.claude.com/docs/en/plugins).
 
 ## Versioning policy
 
-- The repo follows semantic versioning. The plugin `version` in the marketplace entry is the repo version (v1 = 0.2.0; v2 = 0.3.0). [CHANGELOG.md](../CHANGELOG.md) records what changed and which Claude capabilities it depends on.
+- The repo follows semantic versioning. The plugin `version` in the marketplace entry is the repo version (v1 = 0.2.0; v2 = 0.3.0; gates = 0.4.0). [CHANGELOG.md](../CHANGELOG.md) records what changed and which Claude capabilities it depends on.
 - This page is dated and names the runtime contract. A change in what Claude offers is a row change here first, then a skill or template change, then a version bump.
-- Each skill states, in its first paragraph, the schema version it expects (`project-ledger v1`). `meta/ledger.schemaVersion` in a project says what that project runs. A mismatch is a [prompt 09](../prompts/09-capability-check.md) task, not a silent upgrade.
-- A project built from this pattern records its own pattern version in its project instructions (`application-organizer v0.3.0`), so a capability check can tell the person what their project is missing.
+- Each skill states, in its first paragraph, the schema version it expects (`project-ledger v1`). `meta/ledger.schemaVersion` in a project says what that project runs. A mismatch is a [prompt 09](../prompts/09-capability-check.md) task, not a silent upgrade. An addition that leaves every existing row valid keeps the schema version and is recorded by name in `meta/ledger` (0.4.0's `gates: {version: "gates 1"}`); a change that makes an existing row invalid is a new schema version.
+- A project built from this pattern records its own pattern version in its project instructions (`application-organizer v0.4.0`), so a capability check can tell the person what their project is missing.
 
 ## The update procedure
 

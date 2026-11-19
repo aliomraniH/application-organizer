@@ -6,7 +6,7 @@ A graduate-school application season is the worked example: eight programs, sixt
 
 It was developed over three months in one real campaign and then simplified. Every rule here exists because something went wrong without it: four copies of each statement, 70 register versions in 18 days, drafts recorded in memory as sent emails, decisions scattered across reports, and a 40 KB prose ledger that every sweep loaded whole.
 
-Version 0.3.0. See [CHANGELOG.md](CHANGELOG.md) and, for what Claude offers that the pattern relies on, [docs/capabilities.md](docs/capabilities.md).
+Version 0.4.0. See [CHANGELOG.md](CHANGELOG.md) and, for what Claude offers that the pattern relies on, [docs/capabilities.md](docs/capabilities.md).
 
 ## Who it is for
 
@@ -32,6 +32,8 @@ Three authority rules: **the person's words win** over any older text; **propose
 
 Three retrieval rules: **registry first** (read the row, then only what changed); **no claim without a row** (a cited fact carries its source and verification date); **new is not important** (a finding changes a document only when it moves the cumulative record).
 
+Two gates stand before "final": each target's AI-use policy decides what Claude may write and every span it writes is recorded, and every number, citation and name in a document must sit inside a verified claims row. A script lists what is open; the person decides ([docs/gates.md](docs/gates.md)).
+
 Every change passes through one approval in a Decisions doc and lands in one editable doc; the copies follow, and the ledger keeps what happened. A comment you send to Claude in a doc is that approval, given in place. See [docs/architecture.md](docs/architecture.md) and [docs/structured-memory.md](docs/structured-memory.md).
 
 ## Quick start (10 minutes)
@@ -47,7 +49,7 @@ You now have a working project: every question for you lives in one doc, every c
 
 ## Start here
 
-The nine starter prompts, copied unchanged from [prompts/](prompts/). Each asks its own questions in one numbered block and says what it will create. See [prompts/README.md](prompts/README.md) for how they fit together.
+The ten starter prompts, copied unchanged from [prompts/](prompts/). Each asks its own questions in one numbered block and says what it will create. See [prompts/README.md](prompts/README.md) for how they fit together.
 
 ### 01 — Bootstrap a project
 
@@ -61,17 +63,17 @@ Set up a new Claude Project for a long, document-heavy campaign using the applic
    b. The targets (programs, employers, funders, or document sets) and the documents each one needs.
    c. Which documents already exist (attach them or paste links) and which are still to write.
    d. Where my data lives: connectors already connected in this account (Google Drive, Microsoft 365, Notion, Slack, email, calendar), MCP servers, or none.
-   e. Which skills from the repo I have saved (document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check, project-ledger, capability-check) and which I want.
+   e. Which skills from the repo I have saved (document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check, project-ledger, capability-check, final-check) and which I want.
    f. The schedule: do I want a nightly sync and a weekly sweep, and at what times and model.
-   g. The rules I already know I want (voice, facts that must stay exact, things never to name, each target's AI-use policy).
+   g. The rules I already know I want (voice, facts that must stay exact, things never to name), and where each target publishes its AI-use policy, if you know.
 2. Create, in this order, and give me each link once:
    - a Claude Doc "Decisions waiting on <my name>" from templates/decisions-doc.md
    - a Claude Doc "Contact log" from templates/contact-log.md
    - one Claude Doc per document I will edit, with the current text
-   - project files with stable names: register.md, sweep-axes.md (if a sweep), ledger-schema.md (from templates/ledger-schema.md), project-instructions.md
+   - project files with stable names: register.md, sweep-axes.md (if a sweep), ledger-schema.md (from templates/ledger-schema.md), final_check.py.txt (from templates/final_check.py), project-instructions.md
    - the tracker artifact: publish templates/console-page.html with my project name filled in, declaring the db capability (read: view, write: admin), and mcp only if I want a "Run sync now" button
-3. Set up the ledger in the tracker's database with the project-ledger skill: write meta/ledger (schemaVersion "project-ledger v1", schemaDoc ledger-schema.md) and meta/config, one programs row per target, and open the first tasks row for this setup chat. Close that tasks row before your last reply.
-4. Write the project instructions (under 500 words) from templates/project-instructions.md with my answers filled in, including the tracker link and the line "application-organizer v0.3.0", and tell me to paste them into the project's instructions field.
+3. Set up the ledger in the tracker's database with the project-ledger skill: write meta/ledger (schemaVersion "project-ledger v1", schemaDoc ledger-schema.md, gates "gates 1") and meta/config, one programs row per target with its deadline and its AI-use policy row (read the policy page yourself; propose the mode, the sentence that decides it, the link and the date; write it after my yes; a target you could not read stays unknown and you draft nothing for it), and open the first tasks row for this setup chat. Close that tasks row before your last reply.
+4. Write the project instructions (under 500 words) from templates/project-instructions.md with my answers filled in, including the tracker link and the line "application-organizer v0.4.0", and tell me to paste them into the project's instructions field.
 5. Record each rule from 1g in project memory as a dated line in my words. Do not record status (what was sent, what is current); that lives in the docs.
 6. If I asked for scheduled tasks, create them with short prompts that invoke the skills, on the cheapest model that can do the job, with only the connectors each task needs, and tell me which approval setting each one got.
 7. End with a checklist of what I must do myself: save skill cards, paste instructions, connect any connector I named but have not connected, remove unneeded connectors from the tasks, and open the tracker page once to see the registry, the first tasks row and the activity line.
@@ -151,7 +153,7 @@ Run my weekly review for this project (application-organizer pattern). One messa
 1. Decisions doc: list every Open row, grouped by category, oldest first, each with its default. Ask me the three that block the nearest deadline.
 2. Contact log: list rows whose next-step date has passed, rows marked Drafted for more than a week, and rows in To confirm. Do not draft or send anything.
 3. Sweep: one paragraph from the newest sweep report — the items that touch a current document, the unread list, what the next sweep should change.
-4. Documents: from register.md, any document over its limit, any gate still open, any target with a deadline inside 21 days.
+4. Documents: from register.md, any document over its limit, any target with a deadline inside 21 days, each statement's status (draft, final, submitted) and its open gate items, saying how many need a fix from me, and any target whose policy row is still unknown.
 5. Setup: scheduled tasks' last run status (read the transcripts, not the status colour), knowledge size against the cap, and any dated file that still needs migrating to a stable name.
 6. Ledger: tasks rows still in_progress or stopped, with their open items; claims rows that are unverified or stale; findings rows that bear on a document with lastSeenSweep since my last review, each with its direction and the sentence it touches.
 Then wait for my answers and apply them through the skills that own each item, recording each answer in the Decisions doc.
@@ -210,13 +212,37 @@ Run a capability check for this project and for the application-organizer repo (
 5. If I asked for a schedule, create a scheduled task that runs this check monthly on the cheapest model, with no connectors beyond the ones it reads from.
 ```
 
+### 10 — Final check
+
+File: [prompts/10-final-check.md](prompts/10-final-check.md)
+
+```text
+Turn on the gates for this project and run a final check on one document, using the final-check skill from the application-organizer pattern (github.com/aliomraniH/application-organizer; design in docs/gates.md). Change no document text. Ask me the questions in step 1 before writing anything.
+
+1. Ask me, in one message:
+   a. Which document I want checked first, and its target's deadline.
+   b. For each target, where its AI-use policy is published (a link, or "I don't know"), and what I already believe it says.
+   c. Whether I have already submitted anything, and when.
+2. If meta/ledger has no gates entry: save templates/final_check.py as the project file final_check.py.txt; update meta/ledger with gates {version "gates 1", enabledAt, tool} and add spans and gates to collections; add deadline and each statement's status "draft" to every programs row. Tell me what you added.
+3. For each target, read the policy page yourself and propose a policy row: the mode (open, own-words, feedback-only), the sentence of the policy that decides it, the link and today's date. Where the policy is unclear, propose the stricter mode and say why. Write a row only after my yes. A target whose policy you could not read stays unknown, and you draft nothing for it.
+4. Run the preview for the document from 1a and show me every open item in three groups: what needs a fix from me, what you can verify at a source now, and what needs my word. Do not propose waivers.
+5. Work the second group: verify each fact at its source and write its claims row with the exact sentence as its span. Then ask me the third group in one numbered message.
+6. Tell me how many spans of your own wording are on record for this document, and from what date. Say plainly that wording you wrote before the gates were on is not on record, so for that period the record cannot speak and my own answer is all there is.
+7. When nothing is open, and only if the policy is own-words or feedback-only, ask me the authorship question once and store my answer word for word. Then run the check, record the gate, and build the submission file from the text that passed.
+8. Add a line to the nightly sync so it runs the preview and returns an edited final document to draft, and add "Gates open" to my weekly review.
+
+You will create the project file final_check.py.txt, the gates entry in meta/ledger, a policy row per target I approve, claims rows for the facts you verify, a gates row for the document, and, on a pass, the submission file. Nothing in any document changes.
+```
+
 ## Worked examples
 
-Three short flows, with invented names, showing the ledger at work.
+Four short flows, with invented names, showing the ledger at work.
 
 **A sentence gets edited.** The person edits paragraph 3 in the editable doc. The nightly sync opens its tasks row, reads the registry row, probes the doc's revision, sees one changed hash, reads that one block, merges, renders the fit, writes the master copy, the stable file and the register row, searches the doc for the new text word for word, finds the cited paper in the paragraph and updates its claims row, records the snapshot and the event, closes the tasks row. The person sees one Activity line on the console.
 
 **A sweep finds a paper.** Monday's prep agent lists `findings` to disk and builds the exclusion set and a cumulative table for the twelve watched sentences. An axis agent finds a new paper on sentence 7. The judge sees three earlier findings on that sentence, two supporting and one complicating; the new one is a stronger design in the complicating direction, so it is an A item with a Decisions-doc row and a findings row with `direction`, `touches` and `decisionId`. A second paper that repeats what the record holds is a B item with a row and no decision.
+
+**A document becomes final.** The person says the Northfield statement is ready. The final check reads the policy row (own-words, read ten days ago), exports the text and runs the script. It lists three items: a year no claims span covers, a faculty fact past its re-check date, and one sentence that matches a suggestion Claude made in October. Claude verifies the first two at their sources and writes the rows. The third takes no waiver; the person rewrites the sentence. Asked once whether the wording is their own, they answer yes, and the answer is stored as written. The gate passes, the statement is final at that hash, and the submission file is built from the same text. Two days later they fix a typo; the next sync returns the statement to draft until the check runs again.
 
 **A chat resumes.** A new chat opens the project's newest `tasks` row, sees two docs read at known revisions and one open item, reads each doc with `sinceRev`, gets only the paragraphs that changed, and asks the person nothing that `decisionsAnswered` already holds.
 
@@ -227,12 +253,13 @@ Three short flows, with invented names, showing the ledger at work.
 | The seven layers, the three tiers of memory, the change flow, what lives where | [docs/architecture.md](docs/architecture.md) |
 | Why each rule exists | [docs/lessons.md](docs/lessons.md) |
 | The ledger: collections, fields, retrieval rules, limits | [docs/structured-memory.md](docs/structured-memory.md) |
+| The gates before "final": policy modes, spans, claims bound to their words, waivers, the final check | [docs/gates.md](docs/gates.md) |
 | Where documents, data, facts and calculations go; keeping them cheap | [docs/working-with-data.md](docs/working-with-data.md) |
 | What Claude offers that the pattern uses, dated, with how each was verified | [docs/capabilities.md](docs/capabilities.md) |
 | What changed in each version | [CHANGELOG.md](CHANGELOG.md) |
 | Which model for which task; scheduled-task hygiene; context budget | [docs/model-and-usage.md](docs/model-and-usage.md) |
 | What never goes in a public repo or shared doc; placeholders | [docs/privacy.md](docs/privacy.md) |
-| The nine skills, when each triggers, which doc it owns | [skills/README.md](skills/README.md) |
+| The ten skills, when each triggers, which doc it owns | [skills/README.md](skills/README.md) |
 | The starter prompts and their order | [prompts/README.md](prompts/README.md) |
 | Worked example: graduate-school applications | [scenarios/grad-school-applications.md](scenarios/grad-school-applications.md) |
 | Worked example: a job or fellowship search | [scenarios/job-or-fellowship-search.md](scenarios/job-or-fellowship-search.md) |
@@ -240,9 +267,9 @@ Three short flows, with invented names, showing the ledger at work.
 | Connectors, MCP servers, databases, security rules | [extensions/connectors-and-mcp.md](extensions/connectors-and-mcp.md) |
 | Testing connectors and MCP servers: the source-check skill and `sources.md` | [extensions/connectors-and-mcp.md](extensions/connectors-and-mcp.md#testing-sources) |
 | `.mcp.json` examples with placeholders for secrets | [extensions/mcp-config-examples/](extensions/mcp-config-examples/README.md) |
-| Templates: instructions, register, sweep axes, sources, Decisions doc, Contact log, ledger schema, console page, example rows | [templates/](templates/) |
+| Templates: instructions, register, sweep axes, sources, Decisions doc, Contact log, ledger schema, console page, the final-check script, example rows | [templates/](templates/) |
 | Installing the skills as one plugin | [plugin/README.md](plugin/README.md) |
-| Synthetic ledger fixtures and the offline console-page check | [tests/README.md](tests/README.md) |
+| Synthetic ledger fixtures, the final-check tests and the offline console-page check | [tests/README.md](tests/README.md) |
 | How to contribute; the privacy check | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | The briefs this repo was built from | [BRIEF.md](BRIEF.md) (v1), [BRIEF-v2.md](BRIEF-v2.md) (structured memory) |
 

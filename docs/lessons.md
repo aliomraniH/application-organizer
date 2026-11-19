@@ -1,6 +1,6 @@
-# Fifteen lessons
+# Twenty lessons
 
-Lessons 1 to 10 come from three months of one real campaign, run first without the pattern and then with it. Lessons 11 to 15 come from adding structured memory to the same campaign. Each lesson names the failure it prevents.
+Lessons 1 to 10 come from three months of one real campaign, run first without the pattern and then with it. Lessons 11 to 15 come from adding structured memory to the same campaign. Lessons 16 to 20 come from its last four weeks, when the documents were finished and submitted, and are the reasons for the [gates](gates.md). Each lesson names the failure it prevents.
 
 ## 1. One editable doc per thing people edit
 
@@ -60,7 +60,7 @@ Lessons 1 to 10 come from three months of one real campaign, run first without t
 
 **Rule.** Before Claude drafts anything for a target, record that target's AI-use policy in memory and keep an authorship record per document: what Claude suggested, what the person wrote.
 
-**Failure it prevents.** A submission to a target that requires sole authorship, or an attestation the person cannot sign honestly. Where a target requires it, Claude's text is a suggestion the person rewrites.
+**Failure it prevents.** A submission to a target that requires sole authorship, or an attestation the person cannot sign honestly. Where a target requires it, Claude's text is a suggestion the person rewrites. From 0.4.0 the policy is a registry row with a mode and the authorship record is the `spans` collection ([gates.md](gates.md#authorship), lesson 16).
 
 ## 11. Status in prose rots; status in a row does not
 
@@ -91,3 +91,33 @@ Lessons 1 to 10 come from three months of one real campaign, run first without t
 **Rule.** When a console page is built in the same session as its data layer, say that it has not been rendered, and let the first look be the person's.
 
 **Failure it prevents.** A session that cannot render the page reports it as working. The rows can be checked from the session (seed them, read them back at viewer level, try a write the rules must refuse); the page cannot.
+
+## 16. Put the control where the problem starts
+
+**Rule.** A rule about what Claude may write is enforced when Claude writes: the target's policy is a row with a mode, read before the first draft, and the mode decides whether wording is written, suggested or withheld. The check at the end only confirms what the record shows.
+
+**Failure it prevents.** A rule that lives as a sentence in the instructions is read at the start of a chat and is far away by the fortieth turn. A check that first runs on the day of the deadline finds text that is already written, and a block with no time to fix it gets skipped.
+
+## 17. Bind a claim to its words, not to a revision
+
+**Rule.** A claims row carries the exact sentence that states the fact. The row holds for as long as that sentence is in the text.
+
+**Failure it prevents.** In the origin campaign, claims rows pointed at a doc revision. Every edit anywhere in the document left rows to re-point, and re-pointing was the step most often still open when a chat ended. A row bound to its sentence needs no attention until that sentence changes, which is exactly when it should get some.
+
+## 18. A check must find what has no row
+
+**Rule.** The final check scans the text for the shapes a fact takes (figures, years, citations, names) and reports every one that no claims row covers.
+
+**Failure it prevents.** A check that walks the rows can only confirm the rows. A provenance row gets written when someone remembers to write it, so the number nobody recorded is both the one most likely to be wrong and the one a row-based check passes in silence.
+
+## 19. Final is a property of a text, not of a day
+
+**Rule.** "Final" is stored with a hash of the text that passed the check. Any edit returns the document to draft. One path builds the submission file, from the text that was hashed.
+
+**Failure it prevents.** In the origin campaign, documents were marked final and edited again the same day, more than once. The register said final about a text that no longer existed, and the file that went out was built by hand from whichever version was open.
+
+## 20. A gate needs a way through that leaves a mark
+
+**Rule.** Every gate item is pass, fail or waived. A waiver is the person's, for one item, in their words, with a reason, and it stays on the record. Only what cannot honestly be waived is fix-only: a source that contradicts the sentence, and Claude's wording under a policy that requires the person's own.
+
+**Failure it prevents.** A gate with no way through is bypassed whole, and then it protects nothing. A gate with a quiet way through is decoration. The person's word wins in this pattern, so the gate cannot stop them and should not try; its job is that they decide each item knowingly, and that the decision can be read later.

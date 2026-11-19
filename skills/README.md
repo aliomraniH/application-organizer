@@ -1,6 +1,6 @@
 # Skills
 
-Nine skills, one per recurring procedure. Each is short, follows Anthropic's [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices), and sends its questions to the Decisions doc instead of leaving them in chat.
+Ten skills, one per recurring procedure. Each is short, follows Anthropic's [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices), and sends its questions to the Decisions doc instead of leaving them in chat.
 
 | Skill | When it triggers | Doc it owns |
 | --- | --- | --- |
@@ -12,6 +12,7 @@ Nine skills, one per recurring procedure. Each is short, follows Anthropic's [sk
 | [approved-summary](approved-summary/SKILL.md) | When the person says update or approve the summary, dictates a change, or the post-sweep task asks for the weekly proposal | The approved summary doc, `summary.md` and `summary-PROPOSED.md` |
 | [project-ledger](project-ledger/SKILL.md) | When a ledger is set up, a chat or run starts or ends work on a document, row or decision, a cited fact or finding needs a row, or the person asks to backfill or prune | The ledger at `<TRACKER_URL>`: `meta`, `tasks` rows, the row shapes of every collection |
 | [capability-check](capability-check/SKILL.md) | When the capability-check task fires, the person says a new Claude version is out, or a project's schema version does not match | `docs/capabilities.md` in the repo; `meta/ledger.schemaVersion` in a project (on approval) |
+| [final-check](final-check/SKILL.md) | When the person says a document is final, ready or about to be submitted, asks what stands between it and final, asks for the submission file, or says they submitted | `programs/<id>.policy`, each statement's `status`, the `gates` rows, the submission file |
 | [source-check](source-check/SKILL.md) | After a source is added or changed, before the first scheduled run that depends on it, when the source-check task fires, or on request | `sources.md` (results and change log) |
 
 ## Installing
@@ -25,7 +26,7 @@ Angle-bracketed values are filled per project and never committed back here with
 
 ## Schema version
 
-Every skill that reads or writes the ledger states the schema it expects in its first paragraph: **project-ledger v1** ([docs/structured-memory.md](../docs/structured-memory.md)). A project records the version it runs in `meta/ledger.schemaVersion`; a mismatch is a capability-check task, not a silent upgrade.
+Every skill that reads or writes the ledger states the schema it expects in its first paragraph: **project-ledger v1** ([docs/structured-memory.md](../docs/structured-memory.md)). A project records the version it runs in `meta/ledger.schemaVersion`; a mismatch is a capability-check task, not a silent upgrade. The gates (`spans`, `gates`, policy rows) are an addition inside v1, recorded as `meta/ledger.gates`; final-check stops and offers prompt 10 when it is missing.
 
 ## Keep only what you use
 

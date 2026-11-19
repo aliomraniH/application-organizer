@@ -1,0 +1,24 @@
+{
+  "name": "Northfield University",
+  "order": 1,
+  "deadline": "2026-12-01",
+  "policy": {
+    "mode": "own-words",
+    "sourceUrl": "<policy page url>",
+    "quote": "The statement must be written by the applicant.",
+    "readAt": "2026-11-20",
+    "readBy": "Claude, primary page"
+  },
+  "statements": [
+    {
+      "key": "sop",
+      "label": "Statement of purpose",
+      "version": "v1.4",
+      "status": "draft",
+      "gateOpen": 0,
+      "final": null
+    }
+  ],
+  "status": "active",
+  "synthetic": true
+}

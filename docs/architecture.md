@@ -131,6 +131,21 @@ The authority rules hold here too. The check proposes and never repairs: it does
 
 A comment the person sends to Claude in a controlled doc is a decision made in place. Claude applies it in that thread, writes a tasks change line and an event, replies in the thread, and adds a Decisions-doc row only when the change needs a yes on something else. A comment's content never moves into memory.
 
+## Gates before final
+
+A controlled document is not final because someone says so. Two gates stand in front of that word, and both are described in [gates.md](gates.md).
+
+| Gate | Acts before drafting | Acts at every write | Confirms at final |
+| --- | --- | --- | --- |
+| Authorship | the target's AI-use policy is read into a row with a mode | the mode decides what Claude may write; every span Claude writes or suggests is recorded | no recorded span is in the text under a policy that requires the person's own words; the person answers once |
+| Claims | | every cited fact gets a claims row bound to its exact sentence | every number, citation and name sits inside a verified row at the level its kind needs |
+
+The final check is a script, so it gives the same answer every time and costs no model judgment. It lists what is open. The person fixes or waives each item, in their words, with a reason; a contradicted source and a passage of Claude's wording under a restrictive policy can only be fixed. Final is bound to a hash of the text, so an edit returns the document to draft, and only the final check builds the file that is submitted.
+
+The authority rules hold: the person's words win, which is why most items can be waived; propose, wait, apply, which is why a waiver is never a default; and nothing in a document is revised by the check itself.
+
+A comment sent to Claude in a doc is still a decision made in place, within the target's mode: the person's own words are applied as given, and wording Claude supplies is written, suggested or withheld as the mode says.
+
 ## How a change flows
 
 Every change, whatever its source, passes through one approval and lands in one editable doc; the copies follow, and the record keeps what happened.
@@ -166,4 +181,7 @@ The stations: source, Decisions doc, approval, editable doc, sync, ledger, close
 | Does the Drive connector still work, and is it still read-only? | `sources.md` results, written by source-check | none; the ledger probe covers only the ledger itself | memory, an earlier chat |
 | Where was this chat up to? | the newest `tasks` row | `tasks/<YYYY-MM-DD>-<slug>` | memory, a long chat |
 | Where does this cited number come from? | the doc sentence | `claims/<program>-<key>-<nn>` | memory, the sweep report alone |
+| May Claude draft for this target, and how? | the target's policy page | `programs/<id>.policy` (mode, quote, date read) | project instructions, memory alone |
+| Which sentences did Claude write or suggest? | nowhere a person edits | `spans/<program>-<key>-<nnnn>` | chat history, memory |
+| Is this document final, and for which text? | the register's status and "Gates open" columns | `programs/<id>.statements[].status` and `.final.hash`; `gates/<program>-<key>` | a note, a filename, a chat message saying "final" |
 | Has the sweep seen this paper before? | the findings collection | `findings/<identifier>` | a prose ledger loaded whole |
