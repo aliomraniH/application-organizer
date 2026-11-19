@@ -7,7 +7,7 @@ This repository is public. Your campaign is not. The pattern keeps them apart: t
 - A real person's name, email address, phone number or handle
 - A real institution, program, employer, funder or team, when it identifies you or someone else
 - A document URL (Claude Docs, Google Docs, SharePoint, Notion, anything with an id in it) or an artifact URL (your tracker, your console page)
-- Ledger rows from your project: a tasks row, a claims row or a findings export carries real names, documents and dates
+- Ledger rows from your project: a tasks row, a claims row or a findings export carries real names, documents and dates; a spans row holds your draft wording, and a gates row holds your waivers and your answer to the authorship question
 - Any private fact: a deadline you are working to, a recommender, a reply you got, a decision you made
 - Secrets: API keys, connection strings, tokens. `.mcp.json` files use `${VAR}` and the value lives in an environment variable or a network secret
 

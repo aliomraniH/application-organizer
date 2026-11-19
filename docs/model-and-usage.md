@@ -14,6 +14,7 @@ Model names change; this page uses tiers. Anthropic's [Choosing the right Claude
 | Sweep prep (extracting sentences, building the exclusion list) | cheapest | Mechanical |
 | Source checks (source-check skill) | cheapest | Fixed probes, compared with a written expectation |
 | Ledger housekeeping: tasks rows, pruning, scripted backfill (project-ledger) | cheapest | Fixed row shapes; the backfill is a script |
+| Final check (final-check): the script, the row writes, the submission file | cheapest for the run; mid-tier to verify facts at their sources | The script decides pass or fail; no model judges it. The person answers the authorship question |
 | Monthly capability check (capability-check) | cheapest for the diff; top only to judge a proposed schema change | Reads and compares; judgment only where a schema would change |
 | Judging whether a finding changes a current document | top | Only when such items exist, and only for those items |
 | Drafting or reviewing a statement, synthesis, approved-summary proposals | top | Judgment and voice |

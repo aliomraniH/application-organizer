@@ -8,6 +8,8 @@ The rule that holds it together: **status never lives in prose or in memory; it 
 
 The schema version this page describes is **project-ledger v1**. A project records the version it runs in `meta/ledger.schemaVersion`. Field-level templates are in [templates/ledger-schema.md](../templates/ledger-schema.md).
 
+0.4.0 adds **gates 1** inside the same schema version: optional fields on `programs` and `claims`, and two collections, `spans` and `gates`. Rows written before it stay valid, and a project that has not turned the gates on (`meta/ledger.gates`) runs exactly as before. What the gates do is in [gates.md](gates.md).
+
 ## Three tiers of memory
 
 | Tier | Holds | Store | Why there |
@@ -37,14 +39,18 @@ Every read or write in this repo is shown in one line: the action, the path, the
 
 One row per controlled document set (a target and its documents). Every task reads this row first, then only what it points to.
 
-    { name, order,
+    { name, order, deadline?,
+      policy?: { mode, sourceUrl, quote, readAt, readBy, recheckedAt?, note? },
       master: { url, version },
       source: { path, version },
       statements: [ { key, label, version, words, fit, limit,
                       doc: { url, docId, tab, node, syncedRev, seenRev },
-                      snapshot } ],
+                      snapshot,
+                      status?, gateOpen?, final?, submitted? } ],
       status, note, lastSyncAt }
 
+- `policy` is the target's AI-use policy and its mode (`open`, `own-words`, `feedback-only`, `unknown`). It decides what Claude may write for that target. A target without one is `unknown`.
+- A statement's `status` is `draft`, `final` or `submitted`. `final` holds a hash of the text that passed the final check; an edit returns the statement to draft.
 - `syncedRev` is the doc revision the last sync carried; `seenRev` is the newest revision any task has read. When `seenRev` is ahead of `syncedRev`, there is an edit not yet carried.
 - `register.md` is regenerated from these rows; it is the human-readable view, not the source.
 
@@ -77,19 +83,45 @@ An example row, with invented content, is in [templates/tasks-row.json](../templ
 
 ### `claims/<program>-<key>-<nn>`: provenance
 
-    { text, program, key, docBlockId, docRev,
+    { span, kind: "number" | "work" | "account" | "unpublished",
+      text, program, key, docBlockId, docRev,
       source: { identifier, url, title?, firstPublic?,
                 status: "peer-reviewed" | "preprint" | "grey" | "primary-page" | "person" },
       qualifier, verifiedAt, verifiedBy,
       verifiedHow: "full text" | "abstract" | "primary page" | "metadata",
-      status: "verified" | "unverified" | "stale" | "retracted",
-      findingId?, decisionId? }
+      status: "verified" | "unverified" | "stale" | "retracted" | "contradicted" | "retired",
+      recheckBy?, findingId?, decisionId? }
 
 - Written whenever a cited sentence or number is edited, added or verified, from the day the ledger starts.
-- The sync's verify step flags a changed paragraph that has a cited fact and no row. The flag is an event, never a block.
+- `span` is the exact sentence in the document that states the fact. The row holds for as long as that sentence is in the text, so an edit elsewhere needs no update to the row. `docBlockId` and `docRev` record where the sentence stood when it was verified; nothing depends on them.
+- The sync's verify step flags a changed paragraph that has a cited fact and no covering span. The flag is an event and never blocks a sync. It does block final: the final check lists every uncovered fact and every row below the level its `kind` needs ([gates.md](gates.md#claims)).
 - **Forward-only is the default.** No backfill unless the person asks, because a backfill of claims is an expensive reading pass, not a mechanical one.
 
 An example row, with invented content, is in [templates/claims-row.json](../templates/claims-row.json).
+
+### `spans/<program>-<key>-<nnnn>`: wording Claude wrote or suggested
+
+    { program, key, kind: "written" | "suggested", text,
+      where: "doc" | "chat" | "comment", at, task }
+
+- Written whenever Claude writes wording into a controlled doc or proposes wording for one. Never edited, never pruned.
+- Everything in a document that no span covers is the person's. The final check compares each span, sentence by sentence, with the text.
+- A span holds the person's draft wording. It is private in the same way the document is.
+
+An example row is in [templates/span-row.json](../templates/span-row.json).
+
+### `gates/<program>-<key>`: the last final check
+
+    { program, key, hash, words, at, policy, checked,
+      items: [ { id, check, outcome, waivable, detail } ],
+      waivers: [ { item, words, reason, at } ],
+      attestation: { words, at } | null,
+      notes, open, needsFix, outcome: "pass" | "fail", tool }
+
+- Written only from the output of `final_check.py`, by the final-check skill. One row per document, overwritten by each final check; the events collection keeps the history.
+- `hash` is the text that was checked. A statement is final only while its text has this hash.
+
+An example row is in [templates/gate-row.json](../templates/gate-row.json).
 
 ### `findings/<identifier>`: everything a sweep has seen
 
@@ -111,7 +143,7 @@ An example row, with invented content, is in [templates/claims-row.json](../temp
 ### `meta/config` and `meta/ledger`
 
     meta/config · { triggerId, lastRun, lock, schedule, runbook }
-    meta/ledger · { schemaDoc, schemaVersion, collections, counts, backfill,
+    meta/ledger · { schemaDoc, schemaVersion, collections, counts, backfill, gates?,
                     lastFindingsWrite, lastClaimsWrite }
 
 `meta/config.lock` is the sync lock from v1, now a field with a timestamp. `meta/ledger.backfill` records any transcription: source, rows, method, and the note that the source's own count may include repeats.
@@ -137,11 +169,13 @@ A comment's content never moves into memory.
 
 | Collection | Written by | Read first by |
 | --- | --- | --- |
-| `programs` | document-sync, project-ledger (create, backfill) | every skill that touches a document |
+| `programs` | document-sync, project-ledger (create, backfill), final-check (`policy`, statement `status`) | every skill that touches a document |
 | `snapshots` | document-sync | document-sync |
 | `events` | every skill (one line per thing done); project-ledger prunes | the console, the weekly review |
 | `tasks` | every skill and chat (open, update, close); project-ledger prunes | a resuming chat, the weekly review |
-| `claims` | document-sync (flag), approved-summary (on approval), weekly-sweep (A items), project-ledger | document-sync verify, the weekly review |
+| `claims` | document-sync (flag), approved-summary (on approval), weekly-sweep (A items), final-check, project-ledger | document-sync verify, final-check, the weekly review |
+| `spans` | any skill or chat that writes or proposes wording | final-check |
+| `gates` | final-check | document-sync, the console |
 | `findings` | weekly-sweep, project-ledger (backfill) | weekly-sweep prep, evidence-tracker, approved-summary |
 | `meta` | project-ledger, document-sync (lock, lastRun), capability-check (schemaVersion on approval) | every skill, before its first write in a session |
 

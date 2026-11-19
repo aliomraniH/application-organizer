@@ -18,3 +18,18 @@ A demo tracker seeded from these rows is a throwaway: delete it, or clear its ro
     node tests/console-page.check.js            # needs playwright and a Chromium
 
 Prints one line per viewport (`wide`, `phone`) and `seeded`, with the error count and whether the registry, tasks, events and findings sections rendered rows.
+
+## fixtures/gates/ and final_check.test.py
+
+    python3 tests/final_check.test.py           # standard library only
+
+Tests for [`templates/final_check.py`](../templates/final_check.py), the script behind the final-check skill ([docs/gates.md](../docs/gates.md)). The fixtures are one short invented statement, one registry row with an `own-words` policy, four claims rows (one of each kind), one span of suggested wording and one attestation. Every row carries `"synthetic": true`.
+
+Each test is named for the failure the gate stops:
+
+- a passage matching Claude's wording under `own-words` fails, takes no waiver, and still matches after a change of punctuation or case; the person's rewrite passes; under `open` the same passage is a note
+- a restrictive policy needs the person's answer; a missing policy row blocks; an old policy read must be repeated or waived
+- a number with no claims row fails until it is covered or waived, and a waiver without a reason is not applied
+- a claim survives an edit elsewhere with no re-pointing; an edit inside its span uncovers its facts
+- a contradicted source takes no waiver; an unverified row, a number verified from metadata, an unlabelled preprint, unlabelled unpublished data and an overdue re-check each fail
+- any edit after the gate returns the document to draft; a preview or a failed gate is never final

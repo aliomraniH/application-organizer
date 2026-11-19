@@ -1,7 +1,9 @@
 {
   "path": "claims/northfield-sop-03",
   "row": {
-    "text": "In one sample of 212 adults, structured handoffs cut follow-up errors by about a third.",
+    "span": "In one sample of 212 adults, structured handoffs cut follow-up errors by about a third (Example et al., 2026).",
+    "kind": "number",
+    "text": "In one sample of 212 adults, structured handoffs cut follow-up errors by about a third (Example et al., 2026).",
     "program": "northfield",
     "key": "sop",
     "docBlockId": "blk_example_p3",
@@ -18,6 +20,7 @@
     "verifiedBy": "the person, library pass",
     "verifiedHow": "full text",
     "status": "verified",
+    "recheckBy": null,
     "findingId": "10.0000_example.2026.1",
     "decisionId": "D-41"
   }

@@ -13,7 +13,7 @@ Read the summary's README first for section structure and content rules; this sk
 1. Read the proposals file and the approved copy; read the live doc since the last known revision (hand edits win).
 2. Apply only the approved changes by find-and-replace on the quoted current text; change nothing else.
 3. Add a version-history row (version, date, one-line change, approved by the person).
-   Claims: for each approved change that states a cited fact or number, write or update its claims row (`set · claims/summary-<section>-<nn> · {text, docBlockId, docRev, source, qualifier, verifiedAt, verifiedBy, verifiedHow, status: "verified", findingId?, decisionId}`); a fact whose source was not verified stays `unverified` and gets a Decisions-doc row.
+   Claims: for each approved change that states a cited fact or number, write or update its claims row (`set · claims/summary-<section>-<nn> · {span, kind, text, docBlockId, docRev, source, qualifier, verifiedAt, verifiedBy, verifiedHow, status: "verified", findingId?, decisionId}`); a fact whose source was not verified stays `unverified` and gets a Decisions-doc row.
 4. Export; overwrite `summary.md` with front matter (version, date, status APPROVED, link, one-line change).
 5. Rewrite the proposals file to hold only what is still pending; close the Decisions row; add a ledger line.
 6. Reply in one or two lines.

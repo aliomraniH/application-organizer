@@ -1,0 +1,47 @@
+{
+  "path": "gates/northfield-sop",
+  "row": {
+    "program": "northfield",
+    "key": "sop",
+    "hash": "<sha-256 of the normalized text that was checked>",
+    "words": 998,
+    "at": "2026-11-30",
+    "preview": false,
+    "policy": {
+      "mode": "own-words",
+      "readAt": "2026-11-20",
+      "recheckedAt": null,
+      "sourceUrl": "<policy page url>"
+    },
+    "checked": { "claimsInText": 9, "detectorHits": 31, "spansOnRecord": 14 },
+    "items": [
+      {
+        "id": "uncovered:number:3f9a1c20",
+        "check": "uncovered",
+        "outcome": "waived",
+        "waivable": true,
+        "detail": "No claims span covers this number. Add a claims row whose span contains it, or the person waives it with a reason.",
+        "hit": "4,000",
+        "sentence": "The clinic saw 4,000 patients last year."
+      }
+    ],
+    "waivers": [
+      {
+        "item": "uncovered:number:3f9a1c20",
+        "words": "That is our own count.",
+        "reason": "from the clinic's annual report, which I wrote",
+        "at": "2026-11-30T18:00:00Z"
+      }
+    ],
+    "waiverProblems": [],
+    "attestation": {
+      "words": "Yes. Every sentence in this statement is my own wording.",
+      "at": "2026-11-30T18:40:00Z"
+    },
+    "notes": [],
+    "open": 0,
+    "needsFix": 0,
+    "outcome": "pass",
+    "tool": "final_check.py (gates 1)"
+  }
+}

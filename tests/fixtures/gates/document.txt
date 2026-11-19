@@ -1,0 +1,5 @@
+I spent six years building scheduling software for community clinics. In one sample of 212 adults, structured handoffs cut follow-up errors by about a third (Example et al., 2026).
+
+At Northfield University I would work with Dr. Example on how handoff notes are written. Our internal pilot, still unpublished, suggests nurses read short notes first.
+
+I want to learn to test these questions properly.

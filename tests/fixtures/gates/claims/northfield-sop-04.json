@@ -1,0 +1,10 @@
+{
+  "program": "northfield", "key": "sop", "kind": "work",
+  "span": "At Northfield University I would work with Dr. Example on how handoff notes are written.",
+  "text": "At Northfield University I would work with Dr. Example on how handoff notes are written.",
+  "source": { "identifier": "Northfield faculty page", "url": "<primary page url>", "status": "primary-page" },
+  "qualifier": "the page lists handoff notes among Dr. Example's current projects",
+  "verifiedAt": "2026-11-20", "verifiedBy": "Claude, primary page", "verifiedHow": "primary page",
+  "recheckBy": "2026-12-15",
+  "status": "verified", "synthetic": true
+}

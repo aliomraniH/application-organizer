@@ -4,6 +4,35 @@ All notable changes to this repository. The format follows Keep a Changelog 1.1.
 
 Each entry names the Claude capabilities it depends on, as listed in [docs/capabilities.md](docs/capabilities.md).
 
+## [0.4.0] - 2026-11-18
+
+Gates before "final": authorship and claims ([docs/gates.md](docs/gates.md)). The ledger schema stays **project-ledger v1**; the additions are named **gates 1** and recorded in `meta/ledger.gates`. A project that has not turned them on runs as before.
+
+### Added
+- `docs/gates.md`: why a check at the end is not enough, policy modes, spans, claims bound to their words, the detector, waivers, final bound to a hash.
+- Skill `final-check`: reads the policy, runs the check, records waivers and the person's answer to the authorship question, sets final, builds the submission file, records submitted on the person's word. Never runs from a scheduled task.
+- `templates/final_check.py`: the check as a script, standard library only. `check` (with `--preview`) lists open items; `status` says whether a text is still the text that passed.
+- Ledger, inside v1: `programs/<id>.policy` (mode `open`, `own-words`, `feedback-only`, `unknown`) and `.deadline`; per statement `status`, `gateOpen`, `final`, `submitted`; `claims.span`, `.kind`, `.recheckBy` and the statuses `contradicted` and `retired`; collections `spans` and `gates`; event kinds `gate` and `status`.
+- Prompt 10, Final check: turns the gates on in an existing project and runs the first check.
+- Templates `gate-row.json` and `span-row.json`; `claims-row.json` gains `span` and `kind`.
+- Lessons 16 to 20.
+- `tests/final_check.test.py` and `tests/fixtures/gates/`: 22 tests over synthetic rows, each named for the failure it stops.
+- README worked example: a document becomes final.
+
+### Changed
+- document-sync: writes within the target's policy mode (rule 7), records spans (rule 8), never sets final or submitted (rule 9); finds a claims row by its span, not by block and revision; runs the preview on every pass, writes `gateOpen`, returns an edited final document to draft, and adds one Decisions-doc row when open items meet a deadline seven days out.
+- project-ledger: claims rows carry `span` and `kind`; a span row is written whenever Claude writes or proposes wording.
+- Prompt 01 creates the check script, the deadline and the policy row per target; prompt 06 reports each statement's status and open gate items.
+- The claims flag still never blocks a sync. It now blocks final.
+- Plugin: ten skills.
+
+### Not in this version
+- The console page does not yet show policy modes, statuses or open gate items; the register's "Gates open" column and the weekly review carry them.
+- Wording Claude wrote before a project turned the gates on is not in `spans`. For that period the record cannot speak, and prompt 10 says so to the person.
+
+### Depends on
+- Nothing new. The script runs wherever Python 3 runs; the rows use the same ArtifactData calls as 0.3.0.
+
 ## [0.3.0] - 2026-10-21
 
 Built from [BRIEF-v2.md](BRIEF-v2.md): structured memory.

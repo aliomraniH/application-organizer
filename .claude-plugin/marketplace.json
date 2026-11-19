@@ -8,8 +8,8 @@
     {
       "name": "application-organizer",
       "source": ".",
-      "description": "Nine skills for running a long, document-heavy campaign with Claude, with a structured-memory ledger: document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check, project-ledger, capability-check.",
-      "version": "0.3.0",
+      "description": "Ten skills for running a long, document-heavy campaign with Claude, with a structured-memory ledger and gates before a document is final: document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check, project-ledger, capability-check, final-check.",
+      "version": "0.4.0",
       "license": "MIT",
       "keywords": [
         "documents",
@@ -28,7 +28,8 @@
         "./skills/approved-summary",
         "./skills/source-check",
         "./skills/project-ledger",
-        "./skills/capability-check"
+        "./skills/capability-check",
+        "./skills/final-check"
       ]
     }
   ]

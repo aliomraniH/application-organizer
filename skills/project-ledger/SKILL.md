@@ -5,7 +5,7 @@ description: Stewards the structured-memory ledger in the tracker artifact's dat
 
 # Project ledger
 
-Expects schema **project-ledger v1**. The ledger lives in the database of the tracker artifact at <TRACKER_URL> and is read and written with ArtifactData, as the person. Collections: `programs` (registry), `snapshots`, `events`, `tasks` (working memory), `claims` (provenance), `findings` (research record), `meta`. The schema document is `docs/structured-memory.md` in the application-organizer repo, or the project's own copy named in `meta/ledger.schemaDoc`.
+Expects schema **project-ledger v1**. The ledger lives in the database of the tracker artifact at <TRACKER_URL> and is read and written with ArtifactData, as the person. Collections: `programs` (registry), `snapshots`, `events`, `tasks` (working memory), `claims` (provenance), `findings` (research record), `meta`, and, when the gates are on (`meta/ledger.gates`, see `docs/gates.md`), `spans` (wording Claude wrote or suggested) and `gates` (the last final check per document). The schema document is `docs/structured-memory.md` in the application-organizer repo, or the project's own copy named in `meta/ledger.schemaDoc`.
 
 Every call is shown as one line: action · path · fields.
 
@@ -34,8 +34,14 @@ Every call is shown as one line: action · path · fields.
 
 ## Write a claims row
 When a cited sentence or number is edited, added or verified:
-`set · claims/<program>-<key>-<nn> · {text, program, key, docBlockId, docRev, source: {identifier, url, title, firstPublic, status}, qualifier, verifiedAt, verifiedBy, verifiedHow, status, findingId?, decisionId?}`
+`set · claims/<program>-<key>-<nn> · {span, kind, text, program, key, docBlockId, docRev, source: {identifier, url, title, firstPublic, status}, qualifier, verifiedAt, verifiedBy, verifiedHow, status, recheckBy?, findingId?, decisionId?}`
+`span` is the exact sentence in the document that states the fact; the row holds for as long as that sentence is in the text, so an edit elsewhere needs no update. `kind` is `number`, `work`, `account` or `unpublished`. Set `recheckBy` on a fact that can change. When a sentence leaves the document, set `status: "retired"`; never delete the row.
 Then `update · meta/ledger · {lastClaimsWrite}`. `<nn>` is the next free two-digit number for that document. Forward-only: no backfill of claims unless the person asks, because that is a reading pass, not a transcription.
+
+## Write a span row
+Whenever Claude writes wording into a controlled doc, or proposes wording for one in the doc or in chat:
+`set · spans/<program>-<key>-<nnnn> · {program, key, kind: "written" | "suggested", text, where: "doc" | "chat" | "comment", at, task}`
+`<nnnn>` is the next free four-digit number for that document. Spans are never edited or pruned; they are the authorship record.
 
 ## Write a findings row
 Doc id = identifier with `/` replaced by `_`. Search first: `get · findings/<doc id>`.
@@ -59,4 +65,4 @@ A script, not a reading pass. Use it to turn a prose sweep ledger into `findings
 6. Leave the prose record in place as history. Transcribed rows are an exclusion list, not a bibliography: re-verify before quoting.
 
 ## Related skills
-Every other skill opens and closes its tasks row through the steps above. document-sync owns `programs` and `snapshots` content; weekly-sweep owns `findings` content; approved-summary and document-sync write `claims`. capability-check owns `meta/ledger.schemaVersion` changes. Questions go to <DECISIONS_DOC_URL> through decisions-queue.
+Every other skill opens and closes its tasks row through the steps above. document-sync owns `programs` and `snapshots` content; weekly-sweep owns `findings` content; approved-summary and document-sync write `claims`. final-check owns `policy`, `gates` and each statement's `status`. capability-check owns `meta/ledger.schemaVersion` changes. Questions go to <DECISIONS_DOC_URL> through decisions-queue.

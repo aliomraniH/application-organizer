@@ -1,0 +1,9 @@
+{
+  "program": "northfield", "key": "sop", "kind": "account",
+  "span": "I spent six years building scheduling software for community clinics.",
+  "text": "I spent six years building scheduling software for community clinics.",
+  "source": { "identifier": "the person, chat 2026-11-18", "status": "person" },
+  "qualifier": "the person's own account; not independently verified",
+  "verifiedAt": "2026-11-18", "verifiedBy": "the person", "verifiedHow": "the person's account",
+  "status": "verified", "synthetic": true
+}

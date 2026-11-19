@@ -24,18 +24,26 @@ Call shapes are one line: action · path · fields. Fields ending in `?` are opt
 | `claims` | `<program>-<key>-<nn>` | provenance for a cited fact or number | always |
 | `findings` | identifier with `/` → `_` | every identifier a sweep has seen | always |
 | `meta` | `config`, `ledger` | settings, lock, schema version, counts | always |
+| `spans` (gates 1) | `<program>-<key>-<nnnn>` | wording Claude wrote into or proposed for a controlled doc | always; never edited |
+| `gates` (gates 1) | `<program>-<key>` | the last final check of each document | always; overwritten by each final check |
 
 ## Fields
 
 ### programs/<REGISTRY_ROW>
 
-    { name, order,
+    { name, order, deadline?,
+      policy?: { mode: "open" | "own-words" | "feedback-only" | "unknown",
+                 sourceUrl, quote, readAt, readBy, recheckedAt?, note? },
       master: { url, version },
       source: { path, version },
       statements: [ { key, label, version, words, fit, limit,
                       doc: { url, docId, tab, node, syncedRev, seenRev },
-                      snapshot } ],
+                      snapshot,
+                      status?: "draft" | "final" | "submitted", gateOpen?,
+                      final?: { hash, at }, submitted?: { hash, at, source } } ],
       status, note, lastSyncAt }
+
+`deadline`, `policy` and the statement fields after `snapshot` belong to gates 1. A target with no `policy` is `unknown`: nothing is drafted for it.
 
 ### snapshots/<program>-<key>
 
@@ -44,7 +52,7 @@ Call shapes are one line: action · path · fields. Fields ending in `?` are opt
 
 ### events/<id>
 
-    { at, kind: "propagated" | "note" | "needs_person" | "conflict" | "flag" | "ledger",
+    { at, kind: "propagated" | "note" | "needs_person" | "conflict" | "flag" | "ledger" | "gate" | "status",
       status, program, summary, by, decisionId?, resolution? }
 
 ### tasks/<YYYY-MM-DD>-<slug>
@@ -58,15 +66,36 @@ Under 4 KB. Example: `templates/tasks-row.json`.
 
 ### claims/<program>-<key>-<nn>
 
-    { text, program, key, docBlockId, docRev,
+    { span, kind: "number" | "work" | "account" | "unpublished",
+      text, program, key, docBlockId, docRev,
       source: { identifier, url, title?, firstPublic?,
                 status: "peer-reviewed" | "preprint" | "grey" | "primary-page" | "person" },
       qualifier, verifiedAt, verifiedBy,
       verifiedHow: "full text" | "abstract" | "primary page" | "metadata",
-      status: "verified" | "unverified" | "stale" | "retracted",
-      findingId?, decisionId? }
+      status: "verified" | "unverified" | "stale" | "retracted" | "contradicted" | "retired",
+      recheckBy?, findingId?, decisionId? }
 
-Forward-only from the day the ledger starts. Example: `templates/claims-row.json`.
+Forward-only from the day the ledger starts. `span` is the exact sentence that states the fact; the row holds while that sentence is in the text. A row without `span` is matched on `text`. Example: `templates/claims-row.json`.
+
+### spans/<program>-<key>-<nnnn> (gates 1)
+
+    { program, key, kind: "written" | "suggested", text,
+      where: "doc" | "chat" | "comment", at, task }
+
+Example: `templates/span-row.json`.
+
+### gates/<program>-<key> (gates 1)
+
+    { program, key, hash, words, at, preview: false,
+      policy: { mode, readAt, recheckedAt, sourceUrl },
+      checked: { claimsInText, detectorHits, spansOnRecord },
+      items: [ { id, check, outcome: "fail" | "waived", waivable, detail,
+                 hit?, sentence?, span?, passage? } ],
+      waivers: [ { item, words, reason, at } ], waiverProblems: [],
+      attestation: { words, at } | null,
+      notes: [], open, needsFix, outcome: "pass" | "fail", tool }
+
+Written only from the output of `final_check.py`. Example: `templates/gate-row.json`.
 
 ### findings/<identifier with / → _>
 
@@ -89,6 +118,7 @@ Forward-only from the day the ledger starts. Example: `templates/claims-row.json
 
     { schemaDoc, schemaVersion: "project-ledger v1", collections, counts,
       backfill: { source, rows, method, verified, note } | null,
+      gates?: { version: "gates 1", enabledAt, tool },
       lastFindingsWrite, lastClaimsWrite }
 
 ## Access
@@ -100,3 +130,4 @@ The tracker page declares `db` with `{ path: "", read: "view", write: "admin" }`
 | Date | Change |
 | --- | --- |
 | <date> | Ledger created at project-ledger v1 |
+| <date> | Gates turned on (gates 1): `spans`, `gates`, policy rows |
