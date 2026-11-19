@@ -26,24 +26,27 @@ Call shapes are one line: action · path · fields. Fields ending in `?` are opt
 | `meta` | `config`, `ledger` | settings, lock, schema version, counts | always |
 | `spans` (gates 1) | `<program>-<key>-<nnnn>` | wording Claude wrote into or proposed for a controlled doc | always; never edited |
 | `gates` (gates 1) | `<program>-<key>` | the last final check of each document | always; overwritten by each final check |
+| `requirements` | `<program>-<slug>` | one row per thing a target needs | always |
+| `contacts` | `<slug>` | the record of each Contact log row: role, status, next due date; no address | always |
+| `reviews` | `<program>-<key>-<nn>` | one row per review loop | always |
 
 ## Fields
 
 ### programs/<REGISTRY_ROW>
 
     { name, order, deadline?,
+      phase?: "drafting" | "submitted" | "after" | "closed", submittedAt?, outcome?,
       policy?: { mode: "open" | "own-words" | "feedback-only" | "unknown",
                  sourceUrl, quote, readAt, readBy, recheckedAt?, note? },
-      master: { url, version },
-      source: { path, version },
+      master?: { url }, source?: { path },
       statements: [ { key, label, version, words, fit, limit,
                       doc: { url, docId, tab, node, syncedRev, seenRev },
-                      snapshot,
+                      snapshot, mirror?: { url, kind },
                       status?: "draft" | "final" | "submitted", gateOpen?,
                       final?: { hash, at }, submitted?: { hash, at, source } } ],
       status, note, lastSyncAt }
 
-`deadline`, `policy` and the statement fields after `snapshot` belong to gates 1. A target with no `policy` is `unknown`: nothing is drafted for it.
+`deadline`, `policy` and the statement fields from `status` on belong to gates 1. A target with no `policy` is `unknown`: nothing is drafted for it. `master` and `source` are views (a page and a project file), rendered by `render_views.py` and never edited; a missing `phase` is `drafting`.
 
 ### snapshots/<program>-<key>
 
@@ -60,7 +63,7 @@ Call shapes are one line: action · path · fields. Fields ending in `?` are opt
     { startedAt, endedAt?, chat, task, status: "in_progress" | "done" | "stopped",
       docsRead: { "<doc id or url>": { rev | version, at } },
       rowsRead: [], decisionsAsked: [], decisionsAnswered: [],
-      changes: [], open: [], by, model }
+      changes: [], open: [], goal?, by, model }
 
 Under 4 KB. Example: `templates/tasks-row.json`.
 
@@ -110,9 +113,39 @@ Written only from the output of `final_check.py`. Example: `templates/gate-row.j
       touches?: ["<doc> ¶n"], weight?: 1 | 2 | 3,
       source, verified: "ledger-transcribed" | "primary page" | "full text" }
 
+### requirements/<program>-<slug>
+
+    { program, item,
+      kind: "document" | "letter" | "transcript" | "evaluation" | "test" | "fee" | "form" | "interview" | "other",
+      owner: "person" | "recommender" | "institution" | "target",
+      due, leadDays,
+      status: "todo" | "requested" | "sent" | "received" | "verified" | "waived" | "na",
+      source: { url, quote, readAt },
+      contact?, document?, evidence?, note, updatedAt, updatedBy }
+
+Start-by is `due` minus `leadDays`. Example: `templates/requirement-row.json`.
+
+### contacts/<slug>
+
+    { name, organization, program?,
+      role: "prospect" | "recommender" | "office" | "scheduler" | "reviewer" | "other",
+      status, sent: [], lastReplyAt?, nextStep, nextDue,
+      requirement?, closed?, logRev, updatedAt }
+
+The Contact log doc is the source; this row is its record. Never an address. Example: `templates/contact-row.json`.
+
+### reviews/<program>-<key>-<nn>
+
+    { program, key, goal, rubricHash, scale, band,
+      rounds: [ { label, diffs, verdict: "candidate" | "current" | "tie", orderEffect } ],
+      outcome: "accepted" | "kept" | "stopped", acceptedBy?, at, task }
+
+Written from the output of `review_verdict.py`. Example: `templates/review-row.json`.
+
 ### meta/config
 
-    { triggerId, lastRun, lock, schedule, runbook }
+    { triggerId, lastRun, lock, schedule, runbook,
+      views?: { register, budgets?: { register, page } }, contactLogRev? }
 
 ### meta/ledger
 
@@ -131,3 +164,4 @@ The tracker page declares `db` with `{ path: "", read: "view", write: "admin" }`
 | --- | --- |
 | <date> | Ledger created at project-ledger v1 |
 | <date> | Gates turned on (gates 1): `spans`, `gates`, policy rows |
+| <date> | Phases, `requirements`, `contacts`, `reviews`; views rendered by script |

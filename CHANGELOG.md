@@ -6,9 +6,26 @@ Each entry names the Claude capabilities it depends on, as listed in [docs/capab
 
 ## [0.4.0] - 2026-11-18
 
-Gates before "final": authorship and claims ([docs/gates.md](docs/gates.md)). The ledger schema stays **project-ledger v1**; the additions are named **gates 1** and recorded in `meta/ledger.gates`. A project that has not turned them on runs as before.
+What four weeks of finishing and submitting taught: one source with rendered views, gates before "final", phases and requirements, a bounded review loop, and an audit of the project against the pattern. The ledger schema stays **project-ledger v1**: every addition leaves existing rows valid. The gates are named **gates 1** and recorded in `meta/ledger.gates`.
+
+### Changed, and worth reading first
+- **document-sync is rewritten around one source.** The editable doc is the only place text is edited; the ledger records it (snapshot, registry row, event); the register and a target's page are views rendered by `templates/render_views.py` and never edited. The four-place sync of 0.2.0 and 0.3.0, which contradicted lesson 1, is gone. A version costs three row writes; views render once per run. A second editable copy must be declared as a mirror. See [docs/views.md](docs/views.md), which includes how to move a 0.3.0 project.
+- `templates/register.md` is now the script's output for the synthetic fixtures, and a test keeps it so.
 
 ### Added
+- **Views.** `docs/views.md`; `templates/render_views.py` (`register`, `page`), with a size budget per view that refuses instead of truncating.
+- **Lifecycle.** `docs/lifecycle.md`; `programs/<id>.phase` (`drafting`, `submitted`, `after`, `closed`); sync does not read a frozen document and proposes pausing its own task when nothing is being drafted; the sweep files findings against frozen text as preparation and raises no decision; decisions-queue offers once to close moot rows; prompt 11, Phase change.
+- **Requirements.** Skill `requirements` and collection `requirements`: one row per thing a target needs, quoted from the target's page, with owner, due date, lead time and start-by; "submitted is not complete".
+- **Contacts.** Collection `contacts`: the record of each Contact log row, with `role` and `nextDue`, never an address. The doc stays the source.
+- **Review loop.** `docs/review-loop.md`; skill `review-loop`; `templates/review_verdict.py` (noise band from an A/A calibration, order-effect check, round cap); collection `reviews`.
+- **Pattern audit.** Skill `pattern-audit` (nine checks with evidence); `templates/ledger_lint.py` (row shapes, stale counts, rows left open, phases, requirements past their start-by, addresses in rows); prompt 12, Pattern audit; prompt 13, Memory digest.
+- The weekly sweep reports coverage per source and calls a week with a refused source PARTIAL COVERAGE.
+- Lessons 21 to 28; lesson 1 amended.
+- `tests/scripts.test.py` and `tests/fixtures/campaign/`: 25 tests over a synthetic two-target ledger.
+- Templates `requirement-row.json`, `contact-row.json`, `review-row.json`; `sweep-axes.md` gains axes for after submission.
+- Plugin: thirteen skills.
+
+### Gates (the first part of this version)
 - `docs/gates.md`: why a check at the end is not enough, policy modes, spans, claims bound to their words, the detector, waivers, final bound to a hash.
 - Skill `final-check`: reads the policy, runs the check, records waivers and the person's answer to the authorship question, sets final, builds the submission file, records submitted on the person's word. Never runs from a scheduled task.
 - `templates/final_check.py`: the check as a script, standard library only. `check` (with `--preview`) lists open items; `status` says whether a text is still the text that passed.
@@ -24,14 +41,15 @@ Gates before "final": authorship and claims ([docs/gates.md](docs/gates.md)). Th
 - project-ledger: claims rows carry `span` and `kind`; a span row is written whenever Claude writes or proposes wording.
 - Prompt 01 creates the check script, the deadline and the policy row per target; prompt 06 reports each statement's status and open gate items.
 - The claims flag still never blocks a sync. It now blocks final.
-- Plugin: ten skills.
 
 ### Not in this version
-- The console page does not yet show policy modes, statuses or open gate items; the register's "Gates open" column and the weekly review carry them.
+- The console page does not yet show policy modes, statuses, phases, requirements or open gate items; the rendered register and the weekly review carry them.
+- Variants (one shared body, per-target differences, a build that joins them) are a stated rule and an audit check; no builder ships.
+- Nothing here schedules a reminder from `contacts.nextDue`; the weekly review lists what is due.
 - Wording Claude wrote before a project turned the gates on is not in `spans`. For that period the record cannot speak, and prompt 10 says so to the person.
 
 ### Depends on
-- Nothing new. The script runs wherever Python 3 runs; the rows use the same ArtifactData calls as 0.3.0.
+- Nothing new. The four scripts run wherever Python 3 runs; the rows use the same ArtifactData calls as 0.3.0.
 
 ## [0.3.0] - 2026-10-21
 

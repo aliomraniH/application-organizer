@@ -1,0 +1,35 @@
+{
+  "path": "reviews/northfield-sop-01",
+  "row": {
+    "program": "northfield",
+    "key": "sop",
+    "goal": "Make paragraph 2 say what I would study, in under 120 words, without adding a method I have not chosen.",
+    "rubricHash": "<sha-256 of the rubric text>",
+    "scale": 180,
+    "band": 6,
+    "rounds": [
+      {
+        "label": "draft B",
+        "diffs": [
+          -1,
+          1
+        ],
+        "verdict": "tie",
+        "orderEffect": true
+      },
+      {
+        "label": "draft C",
+        "diffs": [
+          9,
+          11
+        ],
+        "verdict": "candidate",
+        "orderEffect": false
+      }
+    ],
+    "outcome": "accepted",
+    "acceptedBy": "the person, chat 2026-11-18",
+    "at": "2026-11-18",
+    "task": "tasks/2026-11-18-northfield-sop"
+  }
+}

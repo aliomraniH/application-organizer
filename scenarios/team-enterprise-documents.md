@@ -21,7 +21,7 @@ The team's failure mode: a decision made in Slack reaches the handbook but not t
 - `queries.md`: the named, parameterized database queries the sweep may run, and nothing else
 
 ### Skills
-- **document-sync**: Doc to Drive and SharePoint copies. Read-only until the team approves write access for a named folder.
+- **document-sync**: the editable doc is the source; a Drive or SharePoint file the team also edits is declared as a mirror, and everything else is a rendered view. Read-only until the team approves write access for a named folder.
 - **decisions-queue**: rows assigned to a person; status set by that person.
 - **weekly-sweep**: regulatory and vendor updates, plus one read-only database query for the week's numbers.
 - **evidence-tracker**: one tab per regulatory area, plus the changelog tab.

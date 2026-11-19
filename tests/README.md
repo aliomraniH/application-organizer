@@ -33,3 +33,16 @@ Each test is named for the failure the gate stops:
 - a claim survives an edit elsewhere with no re-pointing; an edit inside its span uncovers its facts
 - a contradicted source takes no waiver; an unverified row, a number verified from metadata, an unlabelled preprint, unlabelled unpublished data and an overdue re-check each fail
 - any edit after the gate returns the document to draft; a preview or a failed gate is never final
+
+## fixtures/campaign/ and scripts.test.py
+
+    python3 tests/scripts.test.py               # standard library only
+
+A second synthetic ledger, fuller than `fixtures/ledger/`: two targets in different phases (one drafting under an `own-words` policy, one submitted), a snapshot, four requirements (one already past its start-by date), three contacts with due dates and no addresses, two tasks rows, two events, one review row, and `rounds.json` for the verdict script. It is kept apart from `fixtures/ledger/` so the console-page check is unaffected.
+
+The tests cover three scripts:
+
+- [`templates/render_views.py`](../templates/render_views.py): the register is rendered from rows and is the same bytes every time; it names the item that should have been started; a page holds current text only; a view over budget is refused, not truncated; [`templates/register.md`](../templates/register.md) equals a fresh render of these fixtures
+- [`templates/review_verdict.py`](../templates/review_verdict.py): a difference inside the band is a tie; each reader preferring what it read second is an order effect, not a win; a win needs every reader beyond the band; calibration widens the band; two rounds without a win, or the round cap, stop the loop; reads in the same order cannot show a win
+- [`templates/ledger_lint.py`](../templates/ledger_lint.py): the fixture has no errors and names what is late; a tasks row whose shape drifted is an error; oversized and abandoned rows, stale counts and old open events are flagged; a target without a policy or deadline is flagged; phase and statement status must agree; an overdue requirement is an error; an address in any row is an error
+

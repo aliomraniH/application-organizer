@@ -5,7 +5,7 @@ description: Stewards the structured-memory ledger in the tracker artifact's dat
 
 # Project ledger
 
-Expects schema **project-ledger v1**. The ledger lives in the database of the tracker artifact at <TRACKER_URL> and is read and written with ArtifactData, as the person. Collections: `programs` (registry), `snapshots`, `events`, `tasks` (working memory), `claims` (provenance), `findings` (research record), `meta`, and, when the gates are on (`meta/ledger.gates`, see `docs/gates.md`), `spans` (wording Claude wrote or suggested) and `gates` (the last final check per document). The schema document is `docs/structured-memory.md` in the application-organizer repo, or the project's own copy named in `meta/ledger.schemaDoc`.
+Expects schema **project-ledger v1**. The ledger lives in the database of the tracker artifact at <TRACKER_URL> and is read and written with ArtifactData, as the person. Collections: `programs` (registry), `snapshots`, `events`, `tasks` (working memory), `claims` (provenance), `findings` (research record), `meta`, and, when the gates are on (`meta/ledger.gates`, see `docs/gates.md`), `spans` (wording Claude wrote or suggested) and `gates` (the last final check per document). From 0.4.0 a project may also hold `requirements`, `contacts` and `reviews`; each is added to `meta/ledger.collections` when its first row is written. The schema document is `docs/structured-memory.md` in the application-organizer repo, or the project's own copy named in `meta/ledger.schemaDoc`.
 
 Every call is shown as one line: action · path · fields.
 
@@ -49,6 +49,16 @@ Doc id = identifier with `/` replaced by `_`. Search first: `get · findings/<do
 - Seen before: `update · findings/<doc id> · {mentions, sweeps, lastSeenSweep, status?, direction?, touches?, weight?}` (append to `mentions`; keep earlier entries).
 Then `update · meta/ledger · {lastFindingsWrite, counts}`.
 
+## Rows other skills own
+The shapes are in `ledger-schema.md`. This skill does not write them; it keeps them valid.
+- `requirements/<program>-<slug>`: one per thing a target needs. Owner: requirements.
+- `contacts/<slug>`: the record of a Contact log row, with `role` and `nextDue`. Owner: contact-log.
+- `reviews/<program>-<key>-<nn>`: one per review loop. Owner: review-loop.
+- `programs/<id>.phase`: `drafting`, `submitted`, `after`, `closed`. Changed only on the person's word, or to `after` when every requirement is done.
+
+## Lint
+On request, at the weekly review and in a pattern audit: list every collection to disk and run `python3 -I ledger_lint.py --ledger <scratch>`. Fix errors in rows this skill owns (a tasks row's shape, a stale count); report the rest to the skill that owns them.
+
 ## Prune
 On request, or when the weekly review asks:
 1. Events: `query · events · order_by at desc`; keep the newest 300; delete the rest in batches of 50.
@@ -65,4 +75,4 @@ A script, not a reading pass. Use it to turn a prose sweep ledger into `findings
 6. Leave the prose record in place as history. Transcribed rows are an exclusion list, not a bibliography: re-verify before quoting.
 
 ## Related skills
-Every other skill opens and closes its tasks row through the steps above. document-sync owns `programs` and `snapshots` content; weekly-sweep owns `findings` content; approved-summary and document-sync write `claims`. final-check owns `policy`, `gates` and each statement's `status`. capability-check owns `meta/ledger.schemaVersion` changes. Questions go to <DECISIONS_DOC_URL> through decisions-queue.
+Every other skill opens and closes its tasks row through the steps above. A tasks row may carry `goal`, the person's words for what the chat is for (review-loop writes it). document-sync owns `programs` and `snapshots` content; weekly-sweep owns `findings` content; approved-summary and document-sync write `claims`. final-check owns `policy`, `gates` and each statement's `status`. capability-check owns `meta/ledger.schemaVersion` changes. Questions go to <DECISIONS_DOC_URL> through decisions-queue.

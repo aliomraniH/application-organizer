@@ -1,10 +1,10 @@
-# Twenty lessons
+# Twenty-eight lessons
 
-Lessons 1 to 10 come from three months of one real campaign, run first without the pattern and then with it. Lessons 11 to 15 come from adding structured memory to the same campaign. Lessons 16 to 20 come from its last four weeks, when the documents were finished and submitted, and are the reasons for the [gates](gates.md). Each lesson names the failure it prevents.
+Lessons 1 to 10 come from three months of one real campaign, run first without the pattern and then with it. Lessons 11 to 15 come from adding structured memory to the same campaign. Lessons 16 to 28 come from its last four weeks, when the documents were finished and submitted: 16 to 20 are the reasons for the [gates](gates.md), 21 to 28 for [rendered views](views.md), [phases and requirements](lifecycle.md), the [review loop](review-loop.md) and the pattern audit. Each lesson names the failure it prevents.
 
 ## 1. One editable doc per thing people edit
 
-**Rule.** Each document the person edits has one editable doc. Published copies, project files and the register follow it through document-sync.
+**Rule.** Each document the person edits has one editable doc. Nothing else holds its text as a copy to be kept in step; the register and any published page are views rendered from the ledger (lesson 21).
 
 **Failure it prevents.** Copies multiply writes. In the origin campaign, one approved sentence cost about 35 writes across four copies of the same statement, and every write was a chance for the copies to drift apart.
 
@@ -121,3 +121,51 @@ Lessons 1 to 10 come from three months of one real campaign, run first without t
 **Rule.** Every gate item is pass, fail or waived. A waiver is the person's, for one item, in their words, with a reason, and it stays on the record. Only what cannot honestly be waived is fix-only: a source that contradicts the sentence, and Claude's wording under a policy that requires the person's own.
 
 **Failure it prevents.** A gate with no way through is bypassed whole, and then it protects nothing. A gate with a quiet way through is decoration. The person's word wins in this pattern, so the gate cannot stop them and should not try; its job is that they decide each item knowingly, and that the decision can be read later.
+
+## 21. One source; everything else is rendered
+
+**Rule.** A document's text is edited in one place. The ledger keeps a record of it. Every other copy is a view that a script renders from the record and nobody edits. Text moves one way.
+
+**Failure it prevents.** Lesson 1 said one editable doc, and the sync skill of 0.2.0 and 0.3.0 kept four places in step anyway. The pattern contradicted itself, and the skill won: every version was written to every copy. A rule that the tooling does not follow is a wish.
+
+## 22. A view has a budget, and so does the file list
+
+**Rule.** A view holds the present state and nothing else, inside a size budget the script enforces. The project's file list has a budget too, and the pattern audit counts it.
+
+**Failure it prevents.** In the origin campaign the published pages collected change logs and old notes until they passed 90 KB, and the register reached 40 KB. A run that must read a copy before replacing it then cannot finish, and the sync failed on exactly the night it had the most to record. The file list grew the same way, through the one kind of file that was allowed a date in its name.
+
+## 23. A campaign has phases; the machinery must change with them
+
+**Rule.** Each target has a phase. Sync, sweep, decisions and review loops read it and stop working on documents that can no longer change. When a phase changes, the scheduled tasks are looked at again.
+
+**Failure it prevents.** Everything built for drafting keeps running after the last document is submitted: a nightly task reads every document and reports no change, a sweep weighs new findings against frozen sentences, and open decisions ask about text nobody can edit. None of it is wrong. All of it is waste, and it hides what the new phase needs.
+
+## 24. Submitted is not complete
+
+**Rule.** Every thing a target needs is a row, read from the target's own pages, with an owner, a due date and a lead time. A target is complete when its own system shows every item received.
+
+**Failure it prevents.** A project that tracks documents to the word and nothing else finds out on the day of submission that a file is not reviewed until an item arrives that takes weeks to produce. The condition was on the target's second page the whole time.
+
+## 25. Scores compare; they do not decide
+
+**Rule.** A judged comparison has the person's goal written first, a rubric fixed before reading, two readers in opposite orders, a noise band, an order-effect check and a round cap. A tie keeps the current text. A script reads the scores.
+
+**Failure it prevents.** A model's score looks like a measurement. Without a band, a two-point margin gets acted on; without opposite orders, each reader's liking for the text it read last looks like a result; without a cap, the loop never ends, because every round suggests one more fix. And a rubric, followed round after round, will pull a document toward saying things its author never decided.
+
+## 26. Audit the project against its own pattern
+
+**Rule.** Once a month and at each phase change, check the project against the pattern it says it follows, with evidence for every check, and propose fixes with a default of no change.
+
+**Failure it prevents.** The origin campaign wrote down "short prompt, cheapest model, few connectors" for scheduled tasks and, a month later, was running a task every night on the top model, with a prompt older than two of the collections it used and with connectors it never called. Row shapes had drifted, counts were stale, and events had been open for five weeks. Nobody broke a rule on purpose. Nothing was looking.
+
+## 27. Memory needs a digest
+
+**Rule.** Memory holds each current rule once, dated, in the person's words. Periodically the replaced rules move to an archive and any status that crept in moves to the place it belongs, on the person's approval.
+
+**Failure it prevents.** "Dated rules only" erodes. A rule gets narrowed and both versions stay; a fact about what happened on a date gets filed beside the rules; the file grows toward its cap, and the next chat has to work out which of three lines about the same thing is the live one.
+
+## 28. A follow-up needs a date a machine can read
+
+**Rule.** The Contact log stays the source, and each contact has a ledger row with its role and its next due date. A due date reminds the person; it never licenses a message.
+
+**Failure it prevents.** A follow-up date in a doc table is seen only when someone opens the doc and reads the row. Nothing can list what is due this week, so the follow-ups that happen are the ones somebody happens to remember.

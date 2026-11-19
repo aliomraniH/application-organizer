@@ -1,6 +1,6 @@
 ---
 name: contact-log
-description: Keeps and consults the Contact log, the only record of who was contacted, when, who replied and what is due. Use before answering anything about emails, replies or follow-ups, before drafting outreach, and whenever the person says they sent or received a message.
+description: Keeps and consults the Contact log, the only record of who was contacted, when, who replied and what is due, and keeps a ledger row per contact with its role and next due date so follow-ups can be queried. Use before answering anything about emails, replies or follow-ups, before drafting outreach, whenever the person says they sent or received a message, and when they ask what is due.
 ---
 
 # Contact log
@@ -20,8 +20,16 @@ Only the person's word makes a send real. A draft Claude wrote is Drafted with i
 ## Before drafting outreach
 Read the person's row and the target's other rows. Do not draft to anyone marked do-not-contact or write-only-after-offer unless told to. Follow the outreach rules in project memory. Log the accepted draft as Drafted.
 
+## The ledger row
+The doc is the source; `contacts/<slug>` in the ledger at <TRACKER_URL> is its record. In the same turn the doc changes: `set · contacts/<slug> · {name, organization, program?, role, status, sent: [], lastReplyAt?, nextStep, nextDue, requirement?, closed?, logRev, updatedAt}`, then `update · meta/config · {contactLogRev}`.
+- `role`: prospect, recommender, office, scheduler, reviewer, other. `requirement` links the contact to the requirements row it serves.
+- No address in a row, ever. Addresses stay in the doc.
+- Every row that is waiting on someone has a `nextDue`: the date the person gave, or 14 days after the send. A due date reminds the person. It is never a reason to draft or send unasked.
+- If the doc's revision is ahead of `meta/config.contactLogRev`, the person edited it by hand: read the changed rows and rewrite their ledger rows first. Where doc and row differ, the doc wins.
+- "What is due?": `query · contacts · where nextDue <= "<date>"`, then read those rows in the doc before answering.
+
 ## Rules
 Never send anything; the person sends. Never put the person's own address anywhere new. Keep cells short; detail goes in the event log. Hygiene only when asked: rows past their next-step date, rows Drafted over a week, rows to confirm, in one message.
 
 ## Related skills
-A question about a contact that only the person can settle (a send date nobody recorded, whether to follow up) becomes a row in the Decisions doc at <DECISIONS_DOC_URL> through decisions-queue, unless it is a to-confirm row that belongs in this log.
+requirements holds what each contact's letter, transcript or reply is for. A question about a contact that only the person can settle (a send date nobody recorded, whether to follow up) becomes a row in the Decisions doc at <DECISIONS_DOC_URL> through decisions-queue, unless it is a to-confirm row that belongs in this log.

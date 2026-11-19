@@ -13,8 +13,8 @@
     "decisionsAsked": [],
     "decisionsAnswered": [],
     "changes": [
-      "Northfield SOP v1.3 to v1.4: paragraph 3 opening sentence carried to the published copy, program-files/northfield.md and register.md",
-      "claims/northfield-sop-03 docRev updated to 42"
+      "Northfield SOP v1.3 to v1.4: paragraph 3 opening sentence recorded (snapshot, registry row, event); register rendered",
+      "gate preview: 0 open"
     ],
     "open": [],
     "by": "document-sync",

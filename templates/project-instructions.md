@@ -7,25 +7,25 @@ START OF EVERY CHAT
 4. Contacts: anything about who was contacted, replies or follow-ups comes only from the Contact log (<CONTACT_LOG_URL>), never from memory (contact-log skill). Log a send or reply in the same turn it is mentioned.
 
 WHERE THINGS LIVE
-- Current document versions, limits and links: the registry rows in the tracker's ledger (<TRACKER_URL>); register.md is the readable view
-- Machine state (tasks, events, claims, findings): the ledger; schema in ledger-schema.md
-- Each controlled document: its editable doc (working copy), its published copy, its stable project file <project-files>/<slug>.md
+- Each controlled document: its editable doc, the only place its text is edited
+- Versions, status, phase, requirements, due dates: ledger rows (<TRACKER_URL>; schema in ledger-schema.md). register.md is rendered from them; never edit a view
 - Research: evidence tracker doc, approved summary doc, sweep-axes.md; every identifier a sweep has seen is a findings row
 - History: each doc's version history; the archive doc if one exists
 
 FILES
-Stable filenames, overwritten in place, version inside the file. Never create dated or versioned copies. Name specific files when searching project knowledge.
+Stable filenames, overwritten in place. No dated or versioned copies. Name files when searching project knowledge.
 
 AUTHORITY RULES
 - <PERSON>'s words win over any older text. Propose, wait for yes, then apply. Sync carries text; it never revises facts.
 - Status never lives in prose or memory; it lives in a ledger row with a timestamp and a source. No cited fact without a claims row. A new finding changes a document only when it moves the cumulative record.
 - A comment <PERSON> sends to Claude in a doc is a decision made in place: apply it in the thread.
-- After any edit to a controlled document, run document-sync before the final reply.
+- After an accepted edit, run document-sync once before the final reply. A draft not yet accepted is not a version.
+- Nothing proposes a change to a submitted document. Judged comparisons go through review-loop: a tie keeps the current text.
 - Each target's AI-use policy is a registry row with a mode (open, own-words, feedback-only, unknown). The mode decides what Claude may write; every span Claude writes or suggests is recorded. A document becomes final only through final-check.
 - <Facts that must stay exact, names never to use, voice rules: one line each, or a pointer to the memory file that holds them.>
 
 SKILLS FOR THIS PROJECT
-document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, project-ledger, capability-check, final-check, source-check (if the project reads connectors or MCP servers; sources listed in sources.md), plus docs and the file-format skills when a file is asked for. Do not use unrelated skills here unless named.
+document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, project-ledger, capability-check, final-check, requirements, review-loop, pattern-audit, source-check (if sources.md lists any), plus docs and file-format skills when a file is asked for. No unrelated skills unless named.
 
 MODELS AND USAGE
-Routine lookups, logging and syncing: the mid-tier model. Document passes, reviews and synthesis: the top model. Keep chats short; a new task gets a new chat.
+Lookups, logging, syncing: the cheapest model that does it. Document passes and synthesis: the top model. A new task gets a new chat.
