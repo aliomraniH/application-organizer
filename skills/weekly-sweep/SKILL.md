@@ -15,7 +15,8 @@ Expects schema **project-ledger v1**. The sweep finds new work bearing on the pr
 - `meta/ledger`: `lastFindingsWrite` and counts.
 - `findings`: the exclusion list and the window. `list · findings · out_dir <scratch folder>` (to disk, never into context). Window: the newest `lastSeenSweep` minus 3 days to today.
 - The newest `sweep-<date>.md`: last week's open items.
-- Registry first for documents: `get · programs/<REGISTRY_ROW>` for current versions; `register.md` only as the readable view.
+- Registry first for documents: `get · programs/<REGISTRY_ROW>` for current versions and each target's `phase`. Only a statement in `draft` or `final` whose target is in `drafting` has watched sentences. A frozen document has none: findings that would have touched it are filed with the label `PREP` (something to be ready to talk about) and raise no decision.
+- `sweep-axes.md` has a section per phase; search the axes for the phases the targets are in.
 
 ## 2. Search
 1. **Prep agent** (cheapest model): extract the watched sentences in current documents that findings could touch; build the exclusion set from the findings file by identifier (set membership in code, not by reading titles); build the **cumulative brief**: for each watched sentence, every earlier findings row that touches it, with count, direction and dates. Write one shared brief (theme, exclusion set, window, watched sentences, cumulative table, rules).
@@ -25,7 +26,7 @@ Expects schema **project-ledger v1**. The sweep finds new work bearing on the pr
 5. **Judge** (top model, only when an item touches a watched sentence): weigh the item against that sentence's cumulative record, not alone. **A item** only if it moves the picture: a stronger design, a new direction, a reversal, a retraction. An item that repeats what the record holds is a **B item** with a row and no decision.
 
 ## 3. Report
-Sections: window and coverage; A items bearing on a current document (document, version, sentence; supports, complicates, pre-empts, stale; the cumulative record it was weighed against); B general direction; C watched people and organizations; D citation updates; E out-of-window items the record lacks; F decisions needed; G queries run; UNREAD.
+Sections: window and coverage (every source named in `sweep-axes.md`, each marked reached, refused or not tried; if any was refused, the report's first line and the message to the person say PARTIAL COVERAGE and name it); A items bearing on a current document (document, version, sentence; supports, complicates, pre-empts, stale; the cumulative record it was weighed against); B general direction; C watched people and organizations; D citation updates; E out-of-window items the record lacks; F decisions needed; G queries run; UNREAD.
 Save as `sweep-<YYYY-MM-DD>.md` (dated: one report per week is history, not a version).
 
 ## 4. Write the record
@@ -39,7 +40,7 @@ A prose `ledger.md`, if the project kept one, is left in place as history and no
 Every F item becomes a Decisions-doc row through decisions-queue, with source "Sweep <date>, F<n>". Search first; never duplicate an open row or re-add an answered one. Write the row's ID into the findings row (`decisionId`).
 
 ## 6. Finish
-Close the tasks row: `update · tasks/<id> · {endedAt, status, changes, open}`. Scheduled: one message with window, item count, the three to five items that most change a document, decisions added, UNREAD count, coverage gaps. Cut short: save what exists marked PARTIAL, still write the findings rows, and close the tasks row as `stopped`.
+Close the tasks row: `update · tasks/<id> · {endedAt, status, changes, open}`. Scheduled: one message with window, item count, the three to five items that most change a document, decisions added, UNREAD count, coverage gaps. A sweep that reached only part of its sources never reports a quiet week; it reports a partial one. Cut short: save what exists marked PARTIAL, still write the findings rows, and close the tasks row as `stopped`.
 
 ## Library pass
 Sources behind a login (a library, a subscription) are read from the person's own browser on request, never from a scheduled run. Mark each UNREAD item read or still unreachable in the report, update the findings row (`verified: "full text"`, status), and correct agent wording the full text contradicts.

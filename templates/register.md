@@ -1,22 +1,32 @@
 ---
-title: Register (stable)
-version: current state, regenerated on every sync pass
-description: One row per controlled document; overwritten in place. History lives in each doc's version history and the tracker events.
+title: Register (rendered view)
+rendered: 2026-11-18
+description: Rendered from the ledger by render_views.py. Do not edit; change the rows or the editable docs instead.
 ---
 
 # Register
 
-- Tracker: <TRACKER_URL>
-- Last pass: <date>
+## Documents
 
-## Current state
+| Target | Phase | Document | Version | Status | Words | Limit and fit | Gates open | Deadline | Policy | Editable doc |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Northfield University | drafting | Statement of purpose | v1.4 | draft | 998 | 1,000 words; 2 pp | 2 | 2026-12-01 | own-words | [doc](<url>) |
+| Eastbrook Institute | submitted | Statement of purpose | v2.0 | submitted | 742 | 750 words; 2 pp | 0 | 2026-11-15 | open | [doc](<url>) |
 
-| Target | Document | Version | Words | Limit and fit | Editable doc | Published copy | Project file | Deadline | Gates open |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Northfield University | Statement of purpose | v1.4 | 998 | 1,000 words; 2 pp | [doc](<url>) | [page](<url>) | `program-files/northfield.md` | 2026-12-01 | none |
+## Requirements
 
-## Change log (newest first)
+| Target | Item | Owner | Status | Start by | Due |
+| --- | --- | --- | --- | --- | --- |
+| Northfield University | Official transcript, sent by the registrar | institution | todo | 2026-11-10 | 2026-12-01 |
+| Northfield University | Recommendation letter 1 | recommender | requested | 2026-11-03 | 2026-12-01 |
+| Northfield University | Statement of purpose | person | todo | 2026-12-01 | 2026-12-01 |
+| Eastbrook Institute | Credential evaluation of the foreign degree | institution | received | 2026-10-16 | 2026-11-15 |
 
-| Date | Target | Change |
-| --- | --- | --- |
-| 2026-10-21 | Northfield | SOP v1.3 to v1.4: paragraph 3 opening sentence (from the person's doc edit of 20 Oct) |
+## Needs attention
+
+- Northfield University: Official transcript, sent by the registrar (should have started by 2026-11-10 to make 2026-12-01)
+
+## Due in the next 14 days
+
+- Northfield University: Recommendation letter 1 (due 2026-12-01, status requested)
+- Northfield University: Statement of purpose (due 2026-12-01, status todo)

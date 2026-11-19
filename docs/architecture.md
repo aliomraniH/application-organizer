@@ -44,11 +44,11 @@ Why short: context is a budget. Anthropic's guidance on [context engineering](ht
 
 ### 2. Project knowledge
 
-A small set of files with **stable names**: `register.md`, `sweep-axes.md`, one source file per document, `ledger.md`, `evidence-tracker.md`, `summary.md`. Each is overwritten in place, and its version is written inside the file (front matter), not in the filename.
+A small set of files with **stable names**: `sweep-axes.md`, `ledger-schema.md`, `evidence-tracker.md`, `summary.md`, the scripts, and the rendered views (`register.md`, and a file per target if search needs one). Each is overwritten in place. A view is written only by `render_views.py` ([views.md](views.md)); the rest carry their version inside the file, not in the filename.
 
 Why stable: when a project's knowledge grows past what fits in context, Claude searches it ([RAG for Projects](https://support.claude.com/en/articles/11473015-retrieval-augmented-generation-rag-for-projects)). Ten dated copies of one statement mean search can return the wrong one. History already lives in the editable doc's version history.
 
-The one exception is the weekly sweep report, `sweep-<YYYY-MM-DD>.md`: one report per week is history, not a version of one thing.
+The one exception is the weekly sweep report, `sweep-<YYYY-MM-DD>.md`: one report per week is history, not a version of one thing. It is also how a file list grows without anyone deciding it should: a report older than eight weeks has done its work, because its findings are rows. The [pattern audit](../skills/pattern-audit/SKILL.md) holds the project to a file budget.
 
 ### 3. Editable docs
 
@@ -60,7 +60,7 @@ One editable doc (a Claude Doc or equivalent, see [Get started with Claude Docs]
 - the **evidence tracker**: one tab per theme, updated after each sweep
 - the **approved summary**: the statement of direction every other document must agree with
 
-Why one: copies multiply writes. Edits happen in the doc; the copies follow through document-sync.
+Why one: copies multiply writes. Edits happen in the doc. The ledger keeps a record of it, and every other copy is a view rendered from that record by script, never edited ([views.md](views.md)).
 
 ### 4. Memory
 
@@ -146,9 +146,17 @@ The authority rules hold: the person's words win, which is why most items can be
 
 A comment sent to Claude in a doc is still a decision made in place, within the target's mode: the person's own words are applied as given, and wording Claude supplies is written, suggested or withheld as the mode says.
 
+## Phases
+
+A target is `drafting`, `submitted`, `after` or `closed`, and the skills behave differently in each: sync stops reading a submitted document, the sweep stops proposing changes to it, and its open decisions are closed as moot on one confirmation. What a target still needs after its documents are in (letters, transcripts, verification, what comes next) lives in `requirements` rows with owners, lead times and source quotes. See [lifecycle.md](lifecycle.md).
+
+## Keeping the project honest
+
+Two skills look at the project instead of at a document. [review-loop](../skills/review-loop/SKILL.md) bounds judged comparisons with a noise band, an order-effect check and a round cap ([review-loop.md](review-loop.md)). [pattern-audit](../skills/pattern-audit/SKILL.md) checks the project against these pages and reports where it has drifted.
+
 ## How a change flows
 
-Every change, whatever its source, passes through one approval and lands in one editable doc; the copies follow, and the record keeps what happened.
+Every change, whatever its source, passes through one approval and lands in one editable doc; the ledger records it, and the views are rendered from the record.
 
 ```mermaid
 flowchart LR
@@ -156,8 +164,8 @@ flowchart LR
     B --> C{"The person answers"}
     C -->|yes| D["Editable doc updated"]
     C -->|no or silence| E["Default stays; row closed, never asked again"]
-    D --> F["document-sync carries text to published copy, project file, register"]
-    F --> G["Ledger: snapshot, claims row, event"]
+    D --> F["document-sync records it: snapshot, registry row, event"]
+    F --> G["Views rendered once: register, target page"]
     G --> K["tasks row closed; console shows the activity"]
     C -.->|a durable rule stated| H["Memory: dated rule"]
     X["Comment sent to Claude in the doc"] -->|decision made in place| D
@@ -171,7 +179,11 @@ The stations: source, Decisions doc, approval, editable doc, sync, ledger, close
 | Question | Answer lives in | Ledger row | Not in |
 | --- | --- | --- | --- |
 | What is the current text of the statement? | its editable doc | `snapshots/<program>-<key>` (as last carried) | a dated file, memory |
-| Which version is current, how many words, does it fit? | `register.md` | `programs/<id>` | memory, chat |
+| Which version is current, how many words, does it fit? | `register.md`, a rendered view | `programs/<id>` | memory, chat, a hand-edited register |
+| What does this target still need, and what must I start today? | the register's Requirements table | `requirements/<program>-<slug>` | memory, a checklist in a chat |
+| What follow-up is due? | Contact log | `contacts/<slug>.nextDue` | memory |
+| Is this target still being drafted? | the register's Phase column | `programs/<id>.phase` | a note, a task prompt |
+| Did the last judged round show anything? | the review-loop report | `reviews/<program>-<key>-<nn>` | a score table read by eye |
 | Did I email Dr. Example? | Contact log | none | memory, an earlier chat |
 | What am I waiting to decide? | Decisions doc | `events` with `decisionId` (pointers only) | a sweep report, a tracker note |
 | What did this week's sweep find? | `sweep-<date>.md` | `findings` with `lastSeenSweep` = this week | the evidence tracker (it holds the synthesis) |

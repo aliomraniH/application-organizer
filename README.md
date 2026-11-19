@@ -34,7 +34,9 @@ Three retrieval rules: **registry first** (read the row, then only what changed)
 
 Two gates stand before "final": each target's AI-use policy decides what Claude may write and every span it writes is recorded, and every number, citation and name in a document must sit inside a verified claims row. A script lists what is open; the person decides ([docs/gates.md](docs/gates.md)).
 
-Every change passes through one approval in a Decisions doc and lands in one editable doc; the copies follow, and the ledger keeps what happened. A comment you send to Claude in a doc is that approval, given in place. See [docs/architecture.md](docs/architecture.md) and [docs/structured-memory.md](docs/structured-memory.md).
+One source: a document's text is edited in one place, the ledger records it, and the register and every published page are views rendered from the record by script ([docs/views.md](docs/views.md)). Each target has a phase, and what it needs beyond its documents (letters, transcripts, verification) is a row with an owner, a lead time and a start-by date ([docs/lifecycle.md](docs/lifecycle.md)). Judged comparisons run in a bounded loop where a tie keeps the current text ([docs/review-loop.md](docs/review-loop.md)), and a monthly audit checks the project against the pattern itself.
+
+Every change passes through one approval in a Decisions doc and lands in one editable doc; the ledger records it, and the views are rendered from the record. A comment you send to Claude in a doc is that approval, given in place. See [docs/architecture.md](docs/architecture.md) and [docs/structured-memory.md](docs/structured-memory.md).
 
 ## Quick start (10 minutes)
 
@@ -49,7 +51,7 @@ You now have a working project: every question for you lives in one doc, every c
 
 ## Start here
 
-The ten starter prompts, copied unchanged from [prompts/](prompts/). Each asks its own questions in one numbered block and says what it will create. See [prompts/README.md](prompts/README.md) for how they fit together.
+The thirteen starter prompts, copied unchanged from [prompts/](prompts/). Each asks its own questions in one numbered block and says what it will create. See [prompts/README.md](prompts/README.md) for how they fit together.
 
 ### 01 — Bootstrap a project
 
@@ -63,16 +65,16 @@ Set up a new Claude Project for a long, document-heavy campaign using the applic
    b. The targets (programs, employers, funders, or document sets) and the documents each one needs.
    c. Which documents already exist (attach them or paste links) and which are still to write.
    d. Where my data lives: connectors already connected in this account (Google Drive, Microsoft 365, Notion, Slack, email, calendar), MCP servers, or none.
-   e. Which skills from the repo I have saved (document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check, project-ledger, capability-check, final-check) and which I want.
+   e. Which skills from the repo I have saved (document-sync, decisions-queue, contact-log, weekly-sweep, evidence-tracker, approved-summary, source-check, project-ledger, capability-check, final-check, requirements, review-loop, pattern-audit) and which I want.
    f. The schedule: do I want a nightly sync and a weekly sweep, and at what times and model.
    g. The rules I already know I want (voice, facts that must stay exact, things never to name), and where each target publishes its AI-use policy, if you know.
 2. Create, in this order, and give me each link once:
    - a Claude Doc "Decisions waiting on <my name>" from templates/decisions-doc.md
    - a Claude Doc "Contact log" from templates/contact-log.md
    - one Claude Doc per document I will edit, with the current text
-   - project files with stable names: register.md, sweep-axes.md (if a sweep), ledger-schema.md (from templates/ledger-schema.md), final_check.py.txt (from templates/final_check.py), project-instructions.md
+   - project files with stable names: register.md, sweep-axes.md (if a sweep), ledger-schema.md (from templates/ledger-schema.md), the four scripts as .py.txt files (final_check, render_views, ledger_lint, review_verdict, from templates/), project-instructions.md; register.md is rendered by render_views.py and never written by hand
    - the tracker artifact: publish templates/console-page.html with my project name filled in, declaring the db capability (read: view, write: admin), and mcp only if I want a "Run sync now" button
-3. Set up the ledger in the tracker's database with the project-ledger skill: write meta/ledger (schemaVersion "project-ledger v1", schemaDoc ledger-schema.md, gates "gates 1") and meta/config, one programs row per target with its deadline and its AI-use policy row (read the policy page yourself; propose the mode, the sentence that decides it, the link and the date; write it after my yes; a target you could not read stays unknown and you draft nothing for it), and open the first tasks row for this setup chat. Close that tasks row before your last reply.
+3. Set up the ledger in the tracker's database with the project-ledger skill: write meta/ledger (schemaVersion "project-ledger v1", schemaDoc ledger-schema.md, gates "gates 1") and meta/config, one programs row per target with its deadline and its AI-use policy row (read the policy page yourself; propose the mode, the sentence that decides it, the link and the date; write it after my yes; a target you could not read stays unknown and you draft nothing for it), then one requirements row per thing each target needs, read from its own pages and quoted, with its owner, due date and lead time (requirements skill), showing me anything already past its start-by date, and open the first tasks row for this setup chat. Close that tasks row before your last reply.
 4. Write the project instructions (under 500 words) from templates/project-instructions.md with my answers filled in, including the tracker link and the line "application-organizer v0.4.0", and tell me to paste them into the project's instructions field.
 5. Record each rule from 1g in project memory as a dated line in my words. Do not record status (what was sent, what is current); that lives in the docs.
 6. If I asked for scheduled tasks, create them with short prompts that invoke the skills, on the cheapest model that can do the job, with only the connectors each task needs, and tell me which approval setting each one got.
@@ -153,9 +155,9 @@ Run my weekly review for this project (application-organizer pattern). One messa
 1. Decisions doc: list every Open row, grouped by category, oldest first, each with its default. Ask me the three that block the nearest deadline.
 2. Contact log: list rows whose next-step date has passed, rows marked Drafted for more than a week, and rows in To confirm. Do not draft or send anything.
 3. Sweep: one paragraph from the newest sweep report — the items that touch a current document, the unread list, what the next sweep should change.
-4. Documents: from register.md, any document over its limit, any target with a deadline inside 21 days, each statement's status (draft, final, submitted) and its open gate items, saying how many need a fix from me, and any target whose policy row is still unknown.
+4. Documents and requirements: render the register (render_views.py) and read it: everything under "Needs attention" and "Due in the next 14 days", any document over its limit, any target with a deadline inside 21 days, each statement's status (draft, final, submitted) and its open gate items, saying how many need a fix from me, and any target whose policy row is still unknown.
 5. Setup: scheduled tasks' last run status (read the transcripts, not the status colour), knowledge size against the cap, and any dated file that still needs migrating to a stable name.
-6. Ledger: tasks rows still in_progress or stopped, with their open items; claims rows that are unverified or stale; findings rows that bear on a document with lastSeenSweep since my last review, each with its direction and the sentence it touches.
+6. Ledger: run ledger_lint.py over every collection and report its errors and warnings; tasks rows still in_progress or stopped, with their open items; claims rows that are unverified or stale; findings rows that bear on a document with lastSeenSweep since my last review, each with its direction and the sentence it touches.
 Then wait for my answers and apply them through the skills that own each item, recording each answer in the Decisions doc.
 
 You will create nothing until I answer; then the answers go into the Decisions doc, a tasks row for this review, and whatever the owning skills write.
@@ -234,15 +236,79 @@ Turn on the gates for this project and run a final check on one document, using 
 You will create the project file final_check.py.txt, the gates entry in meta/ledger, a policy row per target I approve, claims rows for the facts you verify, a gates row for the document, and, on a pass, the submission file. Nothing in any document changes.
 ```
 
+### 11 — Phase change
+
+File: [prompts/11-phase-change.md](prompts/11-phase-change.md)
+
+```text
+One or more of my targets has changed phase: I submitted, a file became complete, a decision arrived, or I withdrew. Turn the project to match, using the application-organizer pattern (github.com/aliomraniH/application-organizer; design in docs/lifecycle.md). Propose first; apply only what I approve by number.
+
+1. Ask me, in one message: which targets changed, what happened and on what date, which version of each document went in, and what each target's own system shows as received or missing.
+2. For each target I name, propose:
+   a. the registry changes: each statement's status, the target's phase (drafting, submitted, after, closed) and, for closed, the outcome in my words;
+   b. the requirements that are still open, with who owns each and its start-by date, and the new ones that come next (verification of materials, interviews, decision dates, a reply deadline), read from the target's own pages and quoted;
+   c. the contacts those requirements need, with a due date for each next step. Do not draft or send anything.
+3. Decisions doc: list every Open row that is only about a document that can no longer change, and offer to close them together as moot. List separately the rows that still matter.
+4. Sweep: show me the axes that only served documents now frozen, and propose what replaces them for this phase (the people and targets I am waiting on, what I should be ready to talk about). Findings that would have touched a submitted sentence are filed for preparation and raise no decision.
+5. Scheduled tasks: for each one, say whether it still has work in this phase and what it costs per run, and propose pause, slow down or keep. I decide; you change none of them yourself unless I say so.
+6. Views: render the register once and show me the "Needs attention" and "Due in the next 14 days" sections.
+7. After my answers: apply the approved items through the skills that own them (final-check for submitted, requirements, contact-log, decisions-queue, document-sync for the render), write one event per target, and close the tasks row.
+
+You will create nothing until I answer; then registry updates, requirements and contact rows, closed Decisions-doc rows, an updated sweep-axes.md, a rendered register, and Decisions-doc rows for anything still waiting on me.
+```
+
+### 12 — Pattern audit
+
+File: [prompts/12-pattern-audit.md](prompts/12-pattern-audit.md)
+
+```text
+Audit this project against the application-organizer pattern (github.com/aliomraniH/application-organizer), using the pattern-audit skill. Change nothing. Report first, then propose.
+
+1. Run the nine checks in the skill, in order: instructions, scheduled tasks, project files, ledger (list every collection to disk and run ledger_lint.py), memory, Decisions doc, one source and views, gates, review loops. For each check keep the evidence: a number, a file name, a row id.
+2. Report as one table: check, result (pass, fail, not checked), evidence. A check you could not run is "not checked", never "pass". Say which tool or permission was missing.
+3. Then tell me, in three short paragraphs: what this project is spending the most on that no longer earns it; what rule it has drifted furthest from; and what is most likely to go wrong next if nothing changes.
+4. Propose fixes as a numbered list with a default of "no change", each with one sentence on what it fixes and one on its risk, grouped: do now, do at the next phase change, leave.
+5. After my answers: apply only the approved items through the skills that own them. Deleting a file or changing a scheduled task needs its own yes. Record one ledger event with the counts, add a Decisions-doc row for anything left for me, and close the tasks row.
+6. If I ask for a schedule, create a monthly task that runs steps 1 to 4 on the cheapest model with no connectors beyond the ones it reads from, and messages me only when a check fails.
+
+You will create nothing until I answer; then only what I approve, one ledger event, and Decisions-doc rows for what remains.
+```
+
+### 13 — Memory digest
+
+File: [prompts/13-memory-digest.md](prompts/13-memory-digest.md)
+
+```text
+Digest this project's memory, following the application-organizer pattern (github.com/aliomraniH/application-organizer): memory holds dated rules in my words, and nothing else. Change nothing until I approve.
+
+1. Read every memory file for this project and report each one's size against its cap.
+2. Sort every line into one of five groups, quoting it exactly:
+   a. a rule that is current;
+   b. a rule that a later line replaced or narrowed (show both, and which stands);
+   c. the same rule stated more than once;
+   d. status that does not belong in memory at all: a send, a reply, a version, a date something happened, anything that says "currently" or "started". Say where it belongs instead (the Contact log, a registry row, a requirements row, an event);
+   e. a fact about me or my history that is stable and still used.
+3. Propose the digest: group a and e kept, each rule once, in my words, with the date of its latest form; group b reduced to the rule that stands, with one line naming what it replaced and when; group c merged; group d moved to the place you named, and removed from memory only after the move is confirmed. Never reword a rule to make it shorter if that changes what it says. Never drop a rule because it looks old.
+4. Show me the proposed files beside the current sizes, and a list of everything that would leave memory with where each line goes.
+5. After my yes: write the rows and doc entries for group d first and read them back; then write the memory files; then tell me the new sizes. Keep the replaced lines in the project's archive doc, dated, so nothing is lost.
+6. Add one line to my weekly review: memory size against cap, and whether any status line has crept back.
+
+You will create nothing until I answer; then rows or doc entries for misplaced status, shorter memory files with every current rule intact, and an archive entry holding what was replaced.
+```
+
 ## Worked examples
 
-Four short flows, with invented names, showing the ledger at work.
+Six short flows, with invented names, showing the ledger at work.
 
 **A sentence gets edited.** The person edits paragraph 3 in the editable doc. The nightly sync opens its tasks row, reads the registry row, probes the doc's revision, sees one changed hash, reads that one block, merges, renders the fit, writes the master copy, the stable file and the register row, searches the doc for the new text word for word, finds the cited paper in the paragraph and updates its claims row, records the snapshot and the event, closes the tasks row. The person sees one Activity line on the console.
 
 **A sweep finds a paper.** Monday's prep agent lists `findings` to disk and builds the exclusion set and a cumulative table for the twelve watched sentences. An axis agent finds a new paper on sentence 7. The judge sees three earlier findings on that sentence, two supporting and one complicating; the new one is a stronger design in the complicating direction, so it is an A item with a Decisions-doc row and a findings row with `direction`, `touches` and `decisionId`. A second paper that repeats what the record holds is a B item with a row and no decision.
 
 **A document becomes final.** The person says the Northfield statement is ready. The final check reads the policy row (own-words, read ten days ago), exports the text and runs the script. It lists three items: a year no claims span covers, a faculty fact past its re-check date, and one sentence that matches a suggestion Claude made in October. Claude verifies the first two at their sources and writes the rows. The third takes no waiver; the person rewrites the sentence. Asked once whether the wording is their own, they answer yes, and the answer is stored as written. The gate passes, the statement is final at that hash, and the submission file is built from the same text. Two days later they fix a typo; the next sync returns the statement to draft until the check runs again.
+
+**A requirement surfaces in time.** Setting up Northfield, the requirements skill reads the admissions page and the page it links to for degrees earned abroad, and writes eleven rows, each quoting the sentence that asks for the item. One is an official transcript sent by a registrar, with a lead time of three weeks. Three weeks and a day before the deadline, the rendered register lists it first under "Needs attention", and the weekly review asks about it before anything else.
+
+**A round shows nothing.** The person asks whether a new second paragraph is better. Two readers score both versions in opposite orders: one prefers the new text by two points, the other the old by one. The script calls it a tie, because both margins sit inside the band and each reader preferred what it read second. The current text stands, nothing is synced, and the readers' one shared comment goes to the person as a lead.
 
 **A chat resumes.** A new chat opens the project's newest `tasks` row, sees two docs read at known revisions and one open item, reads each doc with `sinceRev`, gets only the paragraphs that changed, and asks the person nothing that `decisionsAnswered` already holds.
 
@@ -254,12 +320,15 @@ Four short flows, with invented names, showing the ledger at work.
 | Why each rule exists | [docs/lessons.md](docs/lessons.md) |
 | The ledger: collections, fields, retrieval rules, limits | [docs/structured-memory.md](docs/structured-memory.md) |
 | The gates before "final": policy modes, spans, claims bound to their words, waivers, the final check | [docs/gates.md](docs/gates.md) |
+| One source and rendered views; what a version costs; budgets; mirrors and variants | [docs/views.md](docs/views.md) |
+| Phases, requirements with lead times, contact rows with due dates | [docs/lifecycle.md](docs/lifecycle.md) |
+| Judged comparisons: the band, the order effect, the round cap | [docs/review-loop.md](docs/review-loop.md) |
 | Where documents, data, facts and calculations go; keeping them cheap | [docs/working-with-data.md](docs/working-with-data.md) |
 | What Claude offers that the pattern uses, dated, with how each was verified | [docs/capabilities.md](docs/capabilities.md) |
 | What changed in each version | [CHANGELOG.md](CHANGELOG.md) |
 | Which model for which task; scheduled-task hygiene; context budget | [docs/model-and-usage.md](docs/model-and-usage.md) |
 | What never goes in a public repo or shared doc; placeholders | [docs/privacy.md](docs/privacy.md) |
-| The ten skills, when each triggers, which doc it owns | [skills/README.md](skills/README.md) |
+| The thirteen skills, when each triggers, which doc it owns | [skills/README.md](skills/README.md) |
 | The starter prompts and their order | [prompts/README.md](prompts/README.md) |
 | Worked example: graduate-school applications | [scenarios/grad-school-applications.md](scenarios/grad-school-applications.md) |
 | Worked example: a job or fellowship search | [scenarios/job-or-fellowship-search.md](scenarios/job-or-fellowship-search.md) |
@@ -267,9 +336,9 @@ Four short flows, with invented names, showing the ledger at work.
 | Connectors, MCP servers, databases, security rules | [extensions/connectors-and-mcp.md](extensions/connectors-and-mcp.md) |
 | Testing connectors and MCP servers: the source-check skill and `sources.md` | [extensions/connectors-and-mcp.md](extensions/connectors-and-mcp.md#testing-sources) |
 | `.mcp.json` examples with placeholders for secrets | [extensions/mcp-config-examples/](extensions/mcp-config-examples/README.md) |
-| Templates: instructions, register, sweep axes, sources, Decisions doc, Contact log, ledger schema, console page, the final-check script, example rows | [templates/](templates/) |
+| Templates: instructions, register, sweep axes, sources, Decisions doc, Contact log, ledger schema, console page, the four scripts (final check, views, lint, verdict), example rows | [templates/](templates/) |
 | Installing the skills as one plugin | [plugin/README.md](plugin/README.md) |
-| Synthetic ledger fixtures, the final-check tests and the offline console-page check | [tests/README.md](tests/README.md) |
+| Synthetic ledger fixtures, the script tests and the offline console-page check | [tests/README.md](tests/README.md) |
 | How to contribute; the privacy check | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | The briefs this repo was built from | [BRIEF.md](BRIEF.md) (v1), [BRIEF-v2.md](BRIEF-v2.md) (structured memory) |
 

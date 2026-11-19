@@ -1,0 +1,18 @@
+{
+  "path": "contacts/registrar",
+  "row": {
+    "name": "Registrar's office",
+    "organization": "<the person's previous university>",
+    "role": "office",
+    "status": "Sent awaiting",
+    "sent": [
+      "2026-11-12"
+    ],
+    "nextStep": "confirm the transcript was sent",
+    "nextDue": "2026-11-26",
+    "requirement": "northfield-transcript",
+    "closed": false,
+    "logRev": 18,
+    "updatedAt": "2026-11-12"
+  }
+}

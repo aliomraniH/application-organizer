@@ -8,7 +8,10 @@ Model names change; this page uses tiers. Anthropic's [Choosing the right Claude
 
 | Work | Tier | Why |
 | --- | --- | --- |
-| Logging a send or reply, checking the Decisions doc, regenerating `register.md` | cheapest | Exact steps written in a skill; little judgment |
+| Logging a send or reply, checking the Decisions doc, updating a requirements row | cheapest | Exact steps written in a skill; little judgment |
+| Rendering views, linting the ledger, reading a round's scores | a script; cheapest model to run it | `render_views.py`, `ledger_lint.py` and `review_verdict.py` give the same answer every time; no model types a view or calls a win |
+| Review-loop readers | top, each in a fresh context with no history | Judgment; independence matters more than tier |
+| Pattern audit | cheapest for the checks; mid-tier for the three summary paragraphs | Mostly counting and comparing |
 | Scheduled sync, post-sweep evidence-tracker update | cheapest | Same steps every run; a skill holds them |
 | Sweep axis agents (search, verify, categorize) | mid-tier | Reads and judges many pages; volume matters |
 | Sweep prep (extracting sentences, building the exclusion list) | cheapest | Mechanical |
@@ -35,8 +38,8 @@ A sync task, written this way:
 
 ```text
 Run the document-sync skill for <PROJECT_NAME>.
-Read the tracker at <TRACKER_URL> and register.md.
-Carry only what changed. Do not revise facts.
+Read the registry rows in the tracker at <TRACKER_URL>.
+Record only what changed; render the views once. Do not revise facts.
 Any conflict, over-limit flag or failed check becomes a row in <DECISIONS_DOC_URL> via decisions-queue.
 Message me only if something was carried or a decision was added.
 ```
@@ -59,3 +62,7 @@ Structured memory ([structured-memory.md](structured-memory.md)) makes three mor
 - **Query by set, in short lists.** `query · findings · where identifier in [<ten candidates>]` checks candidates against the record. `in` takes a short list; batch in tens, or list to disk and compare in code.
 
 A sweep that loaded a 40 KB prose ledger every week now reads nothing it does not need ([lesson 12](lessons.md#12-an-exclusion-list-is-a-set-not-a-document)).
+
+## A task has a phase too
+
+A scheduled task is set up for the work of one phase and keeps running after the work is gone. A nightly sync with no document still being drafted reads every doc and reports no change, every night. Check each task when a target changes phase ([prompt 11](../prompts/11-phase-change.md)): pause it, slow it, or keep it. document-sync proposes pausing itself when no target is in `drafting`.

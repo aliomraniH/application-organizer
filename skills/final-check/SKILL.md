@@ -35,7 +35,7 @@ A document is final only while its text is exactly the text that passed. The che
 11. **Close** the tasks row.
 
 ## When the person says they submitted
-Only their word sets it: `update · programs/<REGISTRY_ROW>` setting `status: "submitted"`, `submitted: {hash, at, source: "the person, chat <date>"}`, plus one event. If the doc's hash differs from `final.hash`, say so plainly and record the hash they name as submitted.
+Only their word sets it: `update · programs/<REGISTRY_ROW>` setting `status: "submitted"`, `submitted: {hash, at, source: "the person, chat <date>"}`, plus one event. If the doc's hash differs from `final.hash`, say so plainly and record the hash they name as submitted. Then hand to requirements, which sets the target's `phase` and lists what is still open: submitted is not complete.
 
 ## Turning the gates on
 `update · meta/ledger · {gates: {version: "gates 1", enabledAt, tool: "final_check.py.txt"}, collections: [..., "spans", "gates"]}`; add `deadline`, `policy` and each statement's `status: "draft"` to every registry row; save the script as a project file. Existing claims rows work unchanged: a row without `span` is matched on its `text`.

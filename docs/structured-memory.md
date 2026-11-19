@@ -8,7 +8,7 @@ The rule that holds it together: **status never lives in prose or in memory; it 
 
 The schema version this page describes is **project-ledger v1**. A project records the version it runs in `meta/ledger.schemaVersion`. Field-level templates are in [templates/ledger-schema.md](../templates/ledger-schema.md).
 
-0.4.0 adds **gates 1** inside the same schema version: optional fields on `programs` and `claims`, and two collections, `spans` and `gates`. Rows written before it stay valid, and a project that has not turned the gates on (`meta/ledger.gates`) runs exactly as before. What the gates do is in [gates.md](gates.md).
+0.4.0 adds **gates 1** inside the same schema version: optional fields on `programs` and `claims`, and two collections, `spans` and `gates`. Rows written before it stay valid, and a project that has not turned the gates on (`meta/ledger.gates`) runs exactly as before. What the gates do is in [gates.md](gates.md). 0.4.0 also adds a `phase` on each target and three more collections, `requirements`, `contacts` and `reviews`, described in [lifecycle.md](lifecycle.md) and [review-loop.md](review-loop.md), and turns the register and each target's page into views rendered from these rows ([views.md](views.md)).
 
 ## Three tiers of memory
 
@@ -39,10 +39,9 @@ Every read or write in this repo is shown in one line: the action, the path, the
 
 One row per controlled document set (a target and its documents). Every task reads this row first, then only what it points to.
 
-    { name, order, deadline?,
+    { name, order, deadline?, phase?, submittedAt?, outcome?,
       policy?: { mode, sourceUrl, quote, readAt, readBy, recheckedAt?, note? },
-      master: { url, version },
-      source: { path, version },
+      master?: { url }, source?: { path },
       statements: [ { key, label, version, words, fit, limit,
                       doc: { url, docId, tab, node, syncedRev, seenRev },
                       snapshot,
@@ -52,7 +51,8 @@ One row per controlled document set (a target and its documents). Every task rea
 - `policy` is the target's AI-use policy and its mode (`open`, `own-words`, `feedback-only`, `unknown`). It decides what Claude may write for that target. A target without one is `unknown`.
 - A statement's `status` is `draft`, `final` or `submitted`. `final` holds a hash of the text that passed the final check; an edit returns the statement to draft.
 - `syncedRev` is the doc revision the last sync carried; `seenRev` is the newest revision any task has read. When `seenRev` is ahead of `syncedRev`, there is an edit not yet carried.
-- `register.md` is regenerated from these rows; it is the human-readable view, not the source.
+- `phase` is `drafting`, `submitted`, `after` or `closed`; a missing phase is `drafting`. Sync, sweep and review loops leave a target's documents alone once it leaves `drafting` ([lifecycle.md](lifecycle.md)).
+- `register.md` is rendered from these rows by `render_views.py`; it is a view, never edited and never read as a source. `master` and `source` name a target's page view and project-file view, if it has them ([views.md](views.md)).
 
 ### `snapshots/<program>-<key>`: the text as last carried
 
@@ -123,6 +123,16 @@ An example row is in [templates/span-row.json](../templates/span-row.json).
 
 An example row is in [templates/gate-row.json](../templates/gate-row.json).
 
+### `requirements`, `contacts`, `reviews`
+
+    requirements/<program>-<slug> · { program, item, kind, owner, due, leadDays, status, source: { url, quote, readAt }, contact?, document?, evidence?, ... }
+    contacts/<slug>               · { name, organization, program?, role, status, sent, nextStep, nextDue, requirement?, closed?, logRev, ... }
+    reviews/<program>-<key>-<nn>  · { program, key, goal, rubricHash, scale, band, rounds, outcome, acceptedBy?, at, task }
+
+- A **requirements** row is one thing a target needs, with who produces it, how long that takes and the sentence on the target's page that asks for it. These rows are the source; the register's second table is rendered from them.
+- A **contacts** row is the record of one Contact log row. The doc stays the source and holds the address; the row holds the role and the next due date, so "what is due" is a query.
+- A **reviews** row is one review loop: the person's goal, the rubric's hash, the noise band, each round's verdict and how it ended.
+
 ### `findings/<identifier>`: everything a sweep has seen
 
     { identifier, type: "doi" | "arxiv" | "pmc" | "pmid" | "acl" | "registry" | "preprint",
@@ -175,6 +185,9 @@ A comment's content never moves into memory.
 | `tasks` | every skill and chat (open, update, close); project-ledger prunes | a resuming chat, the weekly review |
 | `claims` | document-sync (flag), approved-summary (on approval), weekly-sweep (A items), final-check, project-ledger | document-sync verify, final-check, the weekly review |
 | `spans` | any skill or chat that writes or proposes wording | final-check |
+| `requirements` | requirements | the register render, the weekly review, final-check before a submission |
+| `contacts` | contact-log | the weekly review, requirements |
+| `reviews` | review-loop | pattern-audit |
 | `gates` | final-check | document-sync, the console |
 | `findings` | weekly-sweep, project-ledger (backfill) | weekly-sweep prep, evidence-tracker, approved-summary |
 | `meta` | project-ledger, document-sync (lock, lastRun), capability-check (schemaVersion on approval) | every skill, before its first write in a session |

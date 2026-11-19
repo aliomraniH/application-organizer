@@ -30,6 +30,9 @@ A new question that resembles a Closed row is checked against the record first:
 2. Read the cumulative record since: findings rows that touch the same sentence (`query · findings · where touches array-contains "<doc> ¶n"`; or read the list on disk from the last sweep), with count, direction and dates.
 3. Add a new row only if the sentence changed since the decision or the cumulative record moved; say which, and cite the Closed row's ID. Otherwise do nothing: the decision still applies.
 
+## When a document can no longer change
+When a statement becomes `submitted` or its target leaves `drafting`, rows that only proposed a change to it are moot. Do not close them silently and do not keep asking them. Once: list them to the person and offer to close them together with the answer "moot: submitted <date>". Rows about what comes next stay Open. After that, no skill adds a row proposing a change to that document.
+
 ## Adding an item
 Any skill or session that would otherwise leave a question in a report, a tracker note or a chat aside adds a row here instead.
 1. Search first. An Open row that covers it is updated, not duplicated. A Closed row that covers it is acted on, not re-added, unless the check above says the record moved.
